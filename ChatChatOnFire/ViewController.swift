@@ -25,9 +25,64 @@ class ViewController: UITableViewController,LoginViewControllerDelegate {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .Plain, target: self, action: #selector(handleNewMessage))
         
  
-        observeMessages()
+//        observeMessages()
         tableView.registerClass(UserCell.self, forCellReuseIdentifier: cellID)
     }
+    
+    func observeUserMessages( )  {
+        guard let uid = FIRAuth.auth()?.currentUser?.uid else {
+            return
+        }
+        
+        let ref = FIRDatabase.database().reference().child("user-messages").child(uid)
+        ref.observeEventType(.ChildAdded, withBlock: { (snapshot:FIRDataSnapshot) in
+        
+         let messageId = snapshot.key
+            let messagesReference = FIRDatabase.database().reference().child("messages").child(messageId)
+            messagesReference.observeSingleEventOfType(.Value, withBlock: { (snapshot:FIRDataSnapshot) in
+            
+           
+                
+                
+                if let dicionary = snapshot.value as? [String: AnyObject]{
+                    
+                    let message = Message()
+                    
+                    
+                    message.setValuesForKeysWithDictionary(dicionary)
+                    
+                    //                self.messages.append(message)
+                    
+                    if let toID = message.toID {
+                        //passing the vaule align to the same key accordingly into dictionary
+                        
+                        self.messagesDictionary[toID] = message
+                        self.messages = Array(self.messagesDictionary.values)
+                        
+                        //sort
+                        self.messages.sortInPlace({ (message1, message2) -> Bool in
+                            
+                            return message1.timeStamp?.intValue > message2.timeStamp?.intValue
+                        })
+                        
+                        
+                    }
+                    
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.tableView.reloadData()
+                    })
+                    
+                   
+                    
+                } 
+                
+                }, withCancelBlock: nil)
+            
+            
+            }, withCancelBlock: nil)
+    }
+    
+    
     
     // fetching messages
      func observeMessages()  {
@@ -62,7 +117,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate {
                      self.tableView.reloadData()
                 })
                 
-                print(message.text)
+        
                 
             }
             
@@ -71,7 +126,29 @@ class ViewController: UITableViewController,LoginViewControllerDelegate {
         
     }
     
-  
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let message = messages[indexPath.row]
+        
+        guard let chatPartnerId = message.chatPartnerId() else {
+            return
+        }
+        
+        let ref = FIRDatabase.database().reference().child("users").child(chatPartnerId)
+        ref.observeSingleEventOfType(.Value, withBlock: { (snapshot:FIRDataSnapshot) in
+           
+            guard let dictionary = snapshot.value as? [String: AnyObject] else {
+                return
+            }
+            
+            let user = User()
+            user.id = chatPartnerId
+            user.setValuesForKeysWithDictionary(dictionary)
+            
+            self.showChatControllerForUser(user)
+            
+            }, withCancelBlock: nil)
+        
+    }
     
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -139,7 +216,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate {
             let uid = FIRAuth.auth()?.currentUser?.uid
             //fetch
             FIRDatabase.database().reference().child("users").child(uid!).observeEventType(FIRDataEventType.Value, withBlock: { (snapshot) in
-                print(snapshot)
+                
                 
                 if let dictionary = snapshot.value as? [String:AnyObject]{
                     
@@ -162,8 +239,12 @@ class ViewController: UITableViewController,LoginViewControllerDelegate {
     
     
     func setupNavigaionBarWithUser(user:User)  {
-     
-       
+        messages.removeAll()
+        messagesDictionary.removeAll()
+       tableView.reloadData()
+        
+        observeUserMessages()
+ 
         
         
         //create an UIView
