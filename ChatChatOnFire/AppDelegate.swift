@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,6 +18,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+       
+        //after disable the main.storyboard and make window interface through code below
+        //set window frame
+        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        // convenience. most apps call this to show the main window and also make it key. otherwise use view hidden property
+        window?.makeKeyAndVisible()
+       //set rootViewController to default ViewController
+        window?.rootViewController = UINavigationController(rootViewController: ViewController())
+        
+        FIRApp.configure()
+        
         return true
     }
 

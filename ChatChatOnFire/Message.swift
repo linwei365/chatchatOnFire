@@ -6,4 +6,14 @@
 //  Copyright © 2016 Lin Wei. All rights reserved.
 //
 
-import Foundation
+import UIKit
+
+class Message: NSObject {
+   
+    var fromID: String?
+    var text: String?
+    var timeStamp: NSNumber?
+    var toID: String?
+    
+    
+}

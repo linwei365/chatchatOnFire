@@ -7,19 +7,63 @@
 //
 
 import UIKit
+import Firebase
 
 class NewMessageTableViewController: UITableViewController {
-
+    
+   var users = [User]()
+    let cellID = "Cell"
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        tableView.registerClass(UserCell.self, forCellReuseIdentifier: cellID)
+        
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: #selector(handleCancelButtonAction))
+        
+        
+        
+        fetchUsers()
+        
+        
     }
 
+    func fetchUsers( )  {
+        FIRDatabase.database().reference().child("users").observeEventType(FIRDataEventType.ChildAdded , withBlock: { (snapshot:FIRDataSnapshot) in
+            
+            if let dicitonary = snapshot.value as? [String: AnyObject] {
+                
+                let user:User = User()
+                user.id = snapshot.key
+                
+                //this will crash if the firebase key doesn't match to the string key set up in the model
+                user.setValuesForKeysWithDictionary(dicitonary)
+                //safer way
+//                user.name = dicitonary["name"] as! String
+//                user.email = dicitonary["email"] as! String
+                
+                
+                self.users.append(user)
+                
+                dispatch_async(dispatch_get_main_queue(), { 
+                    self.tableView.reloadData()
+                })
+                
+                
+                 print(user.name, user.email)
+            }
+            
+ 
+            }, withCancelBlock: nil)
+        
+    }
+    
+  
+    
+    func handleCancelButtonAction()  {
+        
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -29,23 +73,57 @@ class NewMessageTableViewController: UITableViewController {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return users.count
     }
 
-    /*
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellID , forIndexPath: indexPath) as! UserCell
 
-        // Configure the cell...
+//        let  cell = UITableViewCell(style: .Subtitle, reuseIdentifier: cellID)
+        
+        
+        let user = users[indexPath.row]
+        
+        cell.textLabel?.text = user.name
+        cell.detailTextLabel?.text = user.email
+ 
+        
+        
+        if let profileImageUrl = user.profileImageUrl {
+            
+           
+            cell.profileImageView.loadImageUsingCacheWithUrlString(profileImageUrl)
+            
+        } else{
+            
+            //fix image changing if url string is nil
+            cell.profileImageView.image = UIImage(named: "profile_teaser")
+        }
+        
 
         return cell
     }
-    */
+    
+    var messageController:ViewController?
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        dismissViewControllerAnimated(true) {
+            
+            let user = self.users[indexPath.row]
+             //pass user
+            self.messageController?.showChatControllerForUser(user)
+            
+        }
+
+    }
+    
 
     /*
     // Override to support conditional editing of the table view.
@@ -91,5 +169,10 @@ class NewMessageTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 80
+    }
 
 }
+
+
