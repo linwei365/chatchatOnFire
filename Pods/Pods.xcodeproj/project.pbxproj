@@ -1,0 +1,852 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2A26C06F87572626167605DA1DC0AD9A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */; };
+		47DA8EDE49C13189A41A37D6A86D8D0B /* Pods-ChatChatOnFire-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 71E1355CF704166939BC162457AFD7C0 /* Pods-ChatChatOnFire-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7EF9E265F34B1946828203DBB5B419D1 /* Pods-ChatChatOnFireTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C8F13F03464FB32348AA2E3E8D4DDEAF /* Pods-ChatChatOnFireTests-dummy.m */; };
+		996490D2D97CC6B6EDA896442CB7A7F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */; };
+		A13CB2B24F45BB46B97CBA102F646A2E /* Pods-ChatChatOnFireTests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 09F41CFCEE220A14D29CCAD4E979888A /* Pods-ChatChatOnFireTests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BC732D3759B19168ECC716EBA3A98AFC /* Pods-ChatChatOnFireUITests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C9CCF0E8098F37C0BD6A935C1EAEE05 /* Pods-ChatChatOnFireUITests-dummy.m */; };
+		C33B186D166E7BFB23DC4641E2A319C4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */; };
+		E1E8DCB2396ED7675F45E4ED5273E9FF /* Pods-ChatChatOnFire-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 385311E1B4886405F243BE199DEFC758 /* Pods-ChatChatOnFire-dummy.m */; };
+		ECA1BCE45B8DC4E06AF6D2215B683F56 /* Pods-ChatChatOnFireUITests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DA6D21850515559C2EDA4D46BD53CD /* Pods-ChatChatOnFireUITests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		02DA6D21850515559C2EDA4D46BD53CD /* Pods-ChatChatOnFireUITests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ChatChatOnFireUITests-umbrella.h"; sourceTree = "<group>"; };
+		0412D1419CCF82C27F51A06365E72EDC /* Pods_ChatChatOnFire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatChatOnFire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0654FB6CB7D7A26D81AB60166D9CB8E2 /* Pods-ChatChatOnFireTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ChatChatOnFireTests.debug.xcconfig"; sourceTree = "<group>"; };
+		0690B02DA41066CE1F1798BCF565E222 /* FirebaseAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseAnalytics.framework; path = Frameworks/frameworks/FirebaseAnalytics.framework; sourceTree = "<group>"; };
+		06B28274EBB21B95F6ECA245BC5B7BC2 /* Pods-ChatChatOnFire-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ChatChatOnFire-resources.sh"; sourceTree = "<group>"; };
+		09F41CFCEE220A14D29CCAD4E979888A /* Pods-ChatChatOnFireTests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ChatChatOnFireTests-umbrella.h"; sourceTree = "<group>"; };
+		1815D2A3010404CD543E84C5268BCABC /* FirebaseDatabase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseDatabase.framework; path = Frameworks/FirebaseDatabase.framework; sourceTree = "<group>"; };
+		18AE3138F176AEC4375E946A8295D30E /* Pods-ChatChatOnFireTests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ChatChatOnFireTests-frameworks.sh"; sourceTree = "<group>"; };
+		1C9CCF0E8098F37C0BD6A935C1EAEE05 /* Pods-ChatChatOnFireUITests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ChatChatOnFireUITests-dummy.m"; sourceTree = "<group>"; };
+		28E068939D9EE20C8EF10B07D3E31F4C /* GoogleNetworkingUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleNetworkingUtilities.framework; path = Frameworks/GoogleNetworkingUtilities.framework; sourceTree = "<group>"; };
+		30C2D9DC867001DAC1DE5CEBC62D7801 /* Pods-ChatChatOnFireTests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ChatChatOnFireTests-resources.sh"; sourceTree = "<group>"; };
+		33240FFCD3C7598D3D5FE9F733FC5089 /* Pods-ChatChatOnFireTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ChatChatOnFireTests.release.xcconfig"; sourceTree = "<group>"; };
+		385311E1B4886405F243BE199DEFC758 /* Pods-ChatChatOnFire-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ChatChatOnFire-dummy.m"; sourceTree = "<group>"; };
+		454E007FB9327EED796A7B5A6AD81D6D /* Pods_ChatChatOnFireUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatChatOnFireUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4DD84742871A6446D9EC6D3556EE9043 /* Firebase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Firebase.h; path = Analytics/Sources/Firebase.h; sourceTree = "<group>"; };
+		4ECCE3402153259021AF24C923F9DB31 /* GoogleUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleUtilities.framework; path = Frameworks/GoogleUtilities.framework; sourceTree = "<group>"; };
+		61790C3298D6AE83312E6B5CB7394A45 /* Pods-ChatChatOnFire-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ChatChatOnFire-acknowledgements.plist"; sourceTree = "<group>"; };
+		62780982CD885C7A70604097B25BC94E /* Pods-ChatChatOnFireTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ChatChatOnFireTests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		63DDFEFC1970DD137BD9F7846F09ECAB /* GoogleParsingUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleParsingUtilities.framework; path = Frameworks/GoogleParsingUtilities.framework; sourceTree = "<group>"; };
+		701B54ED31AA1B6A52EEED3AA3A15E63 /* Pods-ChatChatOnFire-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ChatChatOnFire-frameworks.sh"; sourceTree = "<group>"; };
+		71E1355CF704166939BC162457AFD7C0 /* Pods-ChatChatOnFire-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ChatChatOnFire-umbrella.h"; sourceTree = "<group>"; };
+		74221A11F5559623FF3D423E6DCCB341 /* FIRInstanceID.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRInstanceID.h; path = Sources/FIRInstanceID.h; sourceTree = "<group>"; };
+		7BDAAEF736770696AFD6C7C2547CC439 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7F0227E98E9171EA7A6B1D12F20B48D2 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		80EEA839B873EF1586B490472DC4340F /* Pods-ChatChatOnFire-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ChatChatOnFire-acknowledgements.markdown"; sourceTree = "<group>"; };
+		85745E7D437459B31A5864C3F32C9317 /* FirebaseStorage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseStorage.framework; path = Frameworks/FirebaseStorage.framework; sourceTree = "<group>"; };
+		8B3B75B1741D7C755CF38B0E89EF586C /* Pods-ChatChatOnFireUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ChatChatOnFireUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		8C18A8BB696F3F1C10374471EA79B546 /* FirebaseInstanceID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseInstanceID.framework; path = Frameworks/frameworks/FirebaseInstanceID.framework; sourceTree = "<group>"; };
+		9001031AEC1E286C299A68A62B4F1A9E /* Pods-ChatChatOnFireUITests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ChatChatOnFireUITests-resources.sh"; sourceTree = "<group>"; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		AF4363E858D255FCD8037C23D124BD06 /* Pods-ChatChatOnFireUITests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ChatChatOnFireUITests-acknowledgements.plist"; sourceTree = "<group>"; };
+		B039009ED7EF4BAAADEB62B884BB263C /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B07914CE61B45E2BCCE466D2E4FCE05F /* GoogleInterchangeUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleInterchangeUtilities.framework; path = Frameworks/GoogleInterchangeUtilities.framework; sourceTree = "<group>"; };
+		B38DE1B41EDBFC88FC04B5062F45406C /* Pods-ChatChatOnFire.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ChatChatOnFire.release.xcconfig"; sourceTree = "<group>"; };
+		B401175DF0D2AFDAE6EDD5B5503860E3 /* Pods-ChatChatOnFireUITests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-ChatChatOnFireUITests.modulemap"; sourceTree = "<group>"; };
+		B4681D183129176945E0774B09EC4ECC /* FirebaseAuth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseAuth.framework; path = Frameworks/frameworks/FirebaseAuth.framework; sourceTree = "<group>"; };
+		C173A05BE4FA27116BE189E2F75BEB5E /* Pods-ChatChatOnFireTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ChatChatOnFireTests-acknowledgements.plist"; sourceTree = "<group>"; };
+		C4E0C7139328EF049C2AA7CB69B1ED87 /* Pods-ChatChatOnFireUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ChatChatOnFireUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		C8CBDAF041FBEFB744CB36028E0588A7 /* Pods-ChatChatOnFire.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-ChatChatOnFire.modulemap"; sourceTree = "<group>"; };
+		C8F13F03464FB32348AA2E3E8D4DDEAF /* Pods-ChatChatOnFireTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ChatChatOnFireTests-dummy.m"; sourceTree = "<group>"; };
+		CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		D349CBAB752F280BC02DEDFBD1B429C1 /* Pods-ChatChatOnFireUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ChatChatOnFireUITests.release.xcconfig"; sourceTree = "<group>"; };
+		D75A4C9CBAB5AF126BDB0E12FAA82FC6 /* Pods-ChatChatOnFireUITests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ChatChatOnFireUITests-frameworks.sh"; sourceTree = "<group>"; };
+		D8E73491A05877FCBEFACACC392EE9CE /* Pods_ChatChatOnFireTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatChatOnFireTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E63ADFE36C1C481AE69B91C212388C0A /* Pods-ChatChatOnFireTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-ChatChatOnFireTests.modulemap"; sourceTree = "<group>"; };
+		EB1EA0AE4BB595EAFB174B9F0F5C1EE5 /* Pods-ChatChatOnFire.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ChatChatOnFire.debug.xcconfig"; sourceTree = "<group>"; };
+		F49019F577398D68950086920B7B7783 /* GoogleSymbolUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSymbolUtilities.framework; path = Frameworks/GoogleSymbolUtilities.framework; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		318D33EDB1947DC6550BCA8601817790 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A26C06F87572626167605DA1DC0AD9A /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8DE438D1281B021443A104C2AFBB794C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C33B186D166E7BFB23DC4641E2A319C4 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CCDD44A06FBDCE02029A14BE324CD8B0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				996490D2D97CC6B6EDA896442CB7A7F0 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		02DE93CB1A1751D6B5E41CC16E30DBF8 /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				4DD84742871A6446D9EC6D3556EE9043 /* Firebase.h */,
+			);
+			name = Analytics;
+			sourceTree = "<group>";
+		};
+		07DF55006778BB3CBE49D978A9FBB257 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0412D1419CCF82C27F51A06365E72EDC /* Pods_ChatChatOnFire.framework */,
+				D8E73491A05877FCBEFACACC392EE9CE /* Pods_ChatChatOnFireTests.framework */,
+				454E007FB9327EED796A7B5A6AD81D6D /* Pods_ChatChatOnFireUITests.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2C152434E318BDFC6AAA4637635C92CB /* FirebaseAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				34A0684B5AC997FEE0A96FA25B4950BF /* Frameworks */,
+			);
+			path = FirebaseAnalytics;
+			sourceTree = "<group>";
+		};
+		34A0684B5AC997FEE0A96FA25B4950BF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0690B02DA41066CE1F1798BCF565E222 /* FirebaseAnalytics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3DCAB2B7CDE207B3958B6CB957FCC758 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		453639F77B3EB6B4CF18A5FD54CDAE71 /* GoogleSymbolUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				48FDA7781B212532661B34258760D0BC /* Frameworks */,
+			);
+			path = GoogleSymbolUtilities;
+			sourceTree = "<group>";
+		};
+		48FDA7781B212532661B34258760D0BC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F49019F577398D68950086920B7B7783 /* GoogleSymbolUtilities.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5C2CBA538B585ED0ED86EE8D5EEFE48E /* Pods-ChatChatOnFire */ = {
+			isa = PBXGroup;
+			children = (
+				7BDAAEF736770696AFD6C7C2547CC439 /* Info.plist */,
+				C8CBDAF041FBEFB744CB36028E0588A7 /* Pods-ChatChatOnFire.modulemap */,
+				80EEA839B873EF1586B490472DC4340F /* Pods-ChatChatOnFire-acknowledgements.markdown */,
+				61790C3298D6AE83312E6B5CB7394A45 /* Pods-ChatChatOnFire-acknowledgements.plist */,
+				385311E1B4886405F243BE199DEFC758 /* Pods-ChatChatOnFire-dummy.m */,
+				701B54ED31AA1B6A52EEED3AA3A15E63 /* Pods-ChatChatOnFire-frameworks.sh */,
+				06B28274EBB21B95F6ECA245BC5B7BC2 /* Pods-ChatChatOnFire-resources.sh */,
+				71E1355CF704166939BC162457AFD7C0 /* Pods-ChatChatOnFire-umbrella.h */,
+				EB1EA0AE4BB595EAFB174B9F0F5C1EE5 /* Pods-ChatChatOnFire.debug.xcconfig */,
+				B38DE1B41EDBFC88FC04B5062F45406C /* Pods-ChatChatOnFire.release.xcconfig */,
+			);
+			name = "Pods-ChatChatOnFire";
+			path = "Target Support Files/Pods-ChatChatOnFire";
+			sourceTree = "<group>";
+		};
+		6260985D180B8FEB7FC63E1953C6BB6B /* GoogleUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				C116C31BAE424153AD00D6BFFC07ED1C /* Frameworks */,
+			);
+			path = GoogleUtilities;
+			sourceTree = "<group>";
+		};
+		6580F1087CB9A5ADBF554447B2181AC5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B4681D183129176945E0774B09EC4ECC /* FirebaseAuth.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		705DA436C4697E598F8A09DB2B6EB282 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				5C2CBA538B585ED0ED86EE8D5EEFE48E /* Pods-ChatChatOnFire */,
+				96611AEB5CACBDD00246B1C4078EF0C4 /* Pods-ChatChatOnFireTests */,
+				C7353C18DEC60F922F8470EE7300DEF7 /* Pods-ChatChatOnFireUITests */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		7DB346D0F39D3F0E887471402A8071AB = {
+			isa = PBXGroup;
+			children = (
+				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
+				BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */,
+				D747591A8FEEFD8CD1042642C4C3A35F /* Pods */,
+				07DF55006778BB3CBE49D978A9FBB257 /* Products */,
+				705DA436C4697E598F8A09DB2B6EB282 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		863D8178306DF5EA35115F54FE9DB8DC /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				02DE93CB1A1751D6B5E41CC16E30DBF8 /* Analytics */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		89C482C500CAC5298583C8F231C91FDB /* GoogleParsingUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				F4165ED857874553CD1CDC90E0ECC575 /* Frameworks */,
+			);
+			path = GoogleParsingUtilities;
+			sourceTree = "<group>";
+		};
+		96611AEB5CACBDD00246B1C4078EF0C4 /* Pods-ChatChatOnFireTests */ = {
+			isa = PBXGroup;
+			children = (
+				B039009ED7EF4BAAADEB62B884BB263C /* Info.plist */,
+				E63ADFE36C1C481AE69B91C212388C0A /* Pods-ChatChatOnFireTests.modulemap */,
+				62780982CD885C7A70604097B25BC94E /* Pods-ChatChatOnFireTests-acknowledgements.markdown */,
+				C173A05BE4FA27116BE189E2F75BEB5E /* Pods-ChatChatOnFireTests-acknowledgements.plist */,
+				C8F13F03464FB32348AA2E3E8D4DDEAF /* Pods-ChatChatOnFireTests-dummy.m */,
+				18AE3138F176AEC4375E946A8295D30E /* Pods-ChatChatOnFireTests-frameworks.sh */,
+				30C2D9DC867001DAC1DE5CEBC62D7801 /* Pods-ChatChatOnFireTests-resources.sh */,
+				09F41CFCEE220A14D29CCAD4E979888A /* Pods-ChatChatOnFireTests-umbrella.h */,
+				0654FB6CB7D7A26D81AB60166D9CB8E2 /* Pods-ChatChatOnFireTests.debug.xcconfig */,
+				33240FFCD3C7598D3D5FE9F733FC5089 /* Pods-ChatChatOnFireTests.release.xcconfig */,
+			);
+			name = "Pods-ChatChatOnFireTests";
+			path = "Target Support Files/Pods-ChatChatOnFireTests";
+			sourceTree = "<group>";
+		};
+		A6AD1E8361F23DD7FC20CF1F5F6193F0 /* GoogleInterchangeUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				BA74169EA2E244B7BF9E5C173AC728CD /* Frameworks */,
+			);
+			path = GoogleInterchangeUtilities;
+			sourceTree = "<group>";
+		};
+		BA74169EA2E244B7BF9E5C173AC728CD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B07914CE61B45E2BCCE466D2E4FCE05F /* GoogleInterchangeUtilities.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3DCAB2B7CDE207B3958B6CB957FCC758 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BCE09D42006DAF8C572748336E33FF2D /* FirebaseDatabase */ = {
+			isa = PBXGroup;
+			children = (
+				ED95977A669984D9A1D4265992675740 /* Frameworks */,
+			);
+			path = FirebaseDatabase;
+			sourceTree = "<group>";
+		};
+		C0EB6B9D509FDACF21C6699D1A63AED1 /* FirebaseInstanceID */ = {
+			isa = PBXGroup;
+			children = (
+				74221A11F5559623FF3D423E6DCCB341 /* FIRInstanceID.h */,
+				D0DC1400A58B4FBDEC03D4DA33080DA1 /* Frameworks */,
+			);
+			path = FirebaseInstanceID;
+			sourceTree = "<group>";
+		};
+		C116C31BAE424153AD00D6BFFC07ED1C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4ECCE3402153259021AF24C923F9DB31 /* GoogleUtilities.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C7353C18DEC60F922F8470EE7300DEF7 /* Pods-ChatChatOnFireUITests */ = {
+			isa = PBXGroup;
+			children = (
+				7F0227E98E9171EA7A6B1D12F20B48D2 /* Info.plist */,
+				B401175DF0D2AFDAE6EDD5B5503860E3 /* Pods-ChatChatOnFireUITests.modulemap */,
+				C4E0C7139328EF049C2AA7CB69B1ED87 /* Pods-ChatChatOnFireUITests-acknowledgements.markdown */,
+				AF4363E858D255FCD8037C23D124BD06 /* Pods-ChatChatOnFireUITests-acknowledgements.plist */,
+				1C9CCF0E8098F37C0BD6A935C1EAEE05 /* Pods-ChatChatOnFireUITests-dummy.m */,
+				D75A4C9CBAB5AF126BDB0E12FAA82FC6 /* Pods-ChatChatOnFireUITests-frameworks.sh */,
+				9001031AEC1E286C299A68A62B4F1A9E /* Pods-ChatChatOnFireUITests-resources.sh */,
+				02DA6D21850515559C2EDA4D46BD53CD /* Pods-ChatChatOnFireUITests-umbrella.h */,
+				8B3B75B1741D7C755CF38B0E89EF586C /* Pods-ChatChatOnFireUITests.debug.xcconfig */,
+				D349CBAB752F280BC02DEDFBD1B429C1 /* Pods-ChatChatOnFireUITests.release.xcconfig */,
+			);
+			name = "Pods-ChatChatOnFireUITests";
+			path = "Target Support Files/Pods-ChatChatOnFireUITests";
+			sourceTree = "<group>";
+		};
+		D019297FC3F595D3EECFADA365A2C945 /* GoogleNetworkingUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				D9872C8C9F7733E75624E2EFACAC9A3B /* Frameworks */,
+			);
+			path = GoogleNetworkingUtilities;
+			sourceTree = "<group>";
+		};
+		D0DC1400A58B4FBDEC03D4DA33080DA1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8C18A8BB696F3F1C10374471EA79B546 /* FirebaseInstanceID.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D747591A8FEEFD8CD1042642C4C3A35F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				863D8178306DF5EA35115F54FE9DB8DC /* Firebase */,
+				2C152434E318BDFC6AAA4637635C92CB /* FirebaseAnalytics */,
+				E823C0D24FE746E423D1637619881E01 /* FirebaseAuth */,
+				BCE09D42006DAF8C572748336E33FF2D /* FirebaseDatabase */,
+				C0EB6B9D509FDACF21C6699D1A63AED1 /* FirebaseInstanceID */,
+				EA217487184645F1182E6A15A6593A6F /* FirebaseStorage */,
+				A6AD1E8361F23DD7FC20CF1F5F6193F0 /* GoogleInterchangeUtilities */,
+				D019297FC3F595D3EECFADA365A2C945 /* GoogleNetworkingUtilities */,
+				89C482C500CAC5298583C8F231C91FDB /* GoogleParsingUtilities */,
+				453639F77B3EB6B4CF18A5FD54CDAE71 /* GoogleSymbolUtilities */,
+				6260985D180B8FEB7FC63E1953C6BB6B /* GoogleUtilities */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		D9872C8C9F7733E75624E2EFACAC9A3B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				28E068939D9EE20C8EF10B07D3E31F4C /* GoogleNetworkingUtilities.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E823C0D24FE746E423D1637619881E01 /* FirebaseAuth */ = {
+			isa = PBXGroup;
+			children = (
+				6580F1087CB9A5ADBF554447B2181AC5 /* Frameworks */,
+			);
+			path = FirebaseAuth;
+			sourceTree = "<group>";
+		};
+		EA217487184645F1182E6A15A6593A6F /* FirebaseStorage */ = {
+			isa = PBXGroup;
+			children = (
+				FBA08AD981711F6DFD38019600C22D7D /* Frameworks */,
+			);
+			path = FirebaseStorage;
+			sourceTree = "<group>";
+		};
+		ED95977A669984D9A1D4265992675740 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1815D2A3010404CD543E84C5268BCABC /* FirebaseDatabase.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F4165ED857874553CD1CDC90E0ECC575 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				63DDFEFC1970DD137BD9F7846F09ECAB /* GoogleParsingUtilities.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FBA08AD981711F6DFD38019600C22D7D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				85745E7D437459B31A5864C3F32C9317 /* FirebaseStorage.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		36B0D8BF1419EC3C3DE325DD0C7D7425 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A13CB2B24F45BB46B97CBA102F646A2E /* Pods-ChatChatOnFireTests-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F99AF07BBE457CF3080C01ED8ED7980 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ECA1BCE45B8DC4E06AF6D2215B683F56 /* Pods-ChatChatOnFireUITests-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2560494CC15EBBDF5F54FF4942B1C00 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				47DA8EDE49C13189A41A37D6A86D8D0B /* Pods-ChatChatOnFire-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		1B90D307560291C6C4197EEEE41227A8 /* Pods-ChatChatOnFireTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CD8DF60242248A2ECA10BC032F26814B /* Build configuration list for PBXNativeTarget "Pods-ChatChatOnFireTests" */;
+			buildPhases = (
+				3B53E3739A9C233BFFA4AF7F50BB50A3 /* Sources */,
+				8DE438D1281B021443A104C2AFBB794C /* Frameworks */,
+				36B0D8BF1419EC3C3DE325DD0C7D7425 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-ChatChatOnFireTests";
+			productName = "Pods-ChatChatOnFireTests";
+			productReference = D8E73491A05877FCBEFACACC392EE9CE /* Pods_ChatChatOnFireTests.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		68A2ED7641249C73E3F8271A3D3B2B30 /* Pods-ChatChatOnFire */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E1E50F58B2C82D2CA0B807147EAD8175 /* Build configuration list for PBXNativeTarget "Pods-ChatChatOnFire" */;
+			buildPhases = (
+				91CB4A2EFEEDDCC0D47FA588F88DDC4B /* Sources */,
+				318D33EDB1947DC6550BCA8601817790 /* Frameworks */,
+				B2560494CC15EBBDF5F54FF4942B1C00 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-ChatChatOnFire";
+			productName = "Pods-ChatChatOnFire";
+			productReference = 0412D1419CCF82C27F51A06365E72EDC /* Pods_ChatChatOnFire.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		CFA6AD8BA43E8E38AB1CE0B1C5089255 /* Pods-ChatChatOnFireUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1730C1BEDF98EF2A66182EA6F2A52826 /* Build configuration list for PBXNativeTarget "Pods-ChatChatOnFireUITests" */;
+			buildPhases = (
+				63D9871245D2757553FB999DD80540C5 /* Sources */,
+				CCDD44A06FBDCE02029A14BE324CD8B0 /* Frameworks */,
+				7F99AF07BBE457CF3080C01ED8ED7980 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-ChatChatOnFireUITests";
+			productName = "Pods-ChatChatOnFireUITests";
+			productReference = 454E007FB9327EED796A7B5A6AD81D6D /* Pods_ChatChatOnFireUITests.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D41D8CD98F00B204E9800998ECF8427E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0730;
+				LastUpgradeCheck = 0700;
+			};
+			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
+			productRefGroup = 07DF55006778BB3CBE49D978A9FBB257 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				68A2ED7641249C73E3F8271A3D3B2B30 /* Pods-ChatChatOnFire */,
+				1B90D307560291C6C4197EEEE41227A8 /* Pods-ChatChatOnFireTests */,
+				CFA6AD8BA43E8E38AB1CE0B1C5089255 /* Pods-ChatChatOnFireUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3B53E3739A9C233BFFA4AF7F50BB50A3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7EF9E265F34B1946828203DBB5B419D1 /* Pods-ChatChatOnFireTests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63D9871245D2757553FB999DD80540C5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BC732D3759B19168ECC716EBA3A98AFC /* Pods-ChatChatOnFireUITests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		91CB4A2EFEEDDCC0D47FA588F88DDC4B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1E8DCB2396ED7675F45E4ED5273E9FF /* Pods-ChatChatOnFire-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0734BAE6C980749F0686D946843E2A56 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EB1EA0AE4BB595EAFB174B9F0F5C1EE5 /* Pods-ChatChatOnFire.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-ChatChatOnFire/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ChatChatOnFire/Pods-ChatChatOnFire.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = Pods_ChatChatOnFire;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		3FA451D268613890FA8A5A03801E11D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5E62115DE8C09934BF8D2FE5D15FED1E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				ONLY_ACTIVE_ARCH = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		6F8FB2620D61E7D54975CA5913FCE68E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D349CBAB752F280BC02DEDFBD1B429C1 /* Pods-ChatChatOnFireUITests.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-ChatChatOnFireUITests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ChatChatOnFireUITests/Pods-ChatChatOnFireUITests.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = Pods_ChatChatOnFireUITests;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		7938A53CBE5D3623E6A3B36F116348FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 33240FFCD3C7598D3D5FE9F733FC5089 /* Pods-ChatChatOnFireTests.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-ChatChatOnFireTests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ChatChatOnFireTests/Pods-ChatChatOnFireTests.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = Pods_ChatChatOnFireTests;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		9EF47CFD679FFF4BA2D8FEF09DE9D735 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8B3B75B1741D7C755CF38B0E89EF586C /* Pods-ChatChatOnFireUITests.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-ChatChatOnFireUITests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ChatChatOnFireUITests/Pods-ChatChatOnFireUITests.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = Pods_ChatChatOnFireUITests;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		BA8B80E1104E6C983DAFC94C750100E3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0654FB6CB7D7A26D81AB60166D9CB8E2 /* Pods-ChatChatOnFireTests.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-ChatChatOnFireTests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ChatChatOnFireTests/Pods-ChatChatOnFireTests.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = Pods_ChatChatOnFireTests;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		D468F298C6357FD4C55D0AAD07D7B406 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B38DE1B41EDBFC88FC04B5062F45406C /* Pods-ChatChatOnFire.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-ChatChatOnFire/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ChatChatOnFire/Pods-ChatChatOnFire.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = Pods_ChatChatOnFire;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1730C1BEDF98EF2A66182EA6F2A52826 /* Build configuration list for PBXNativeTarget "Pods-ChatChatOnFireUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9EF47CFD679FFF4BA2D8FEF09DE9D735 /* Debug */,
+				6F8FB2620D61E7D54975CA5913FCE68E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5E62115DE8C09934BF8D2FE5D15FED1E /* Debug */,
+				3FA451D268613890FA8A5A03801E11D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CD8DF60242248A2ECA10BC032F26814B /* Build configuration list for PBXNativeTarget "Pods-ChatChatOnFireTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA8B80E1104E6C983DAFC94C750100E3 /* Debug */,
+				7938A53CBE5D3623E6A3B36F116348FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E1E50F58B2C82D2CA0B807147EAD8175 /* Build configuration list for PBXNativeTarget "Pods-ChatChatOnFire" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0734BAE6C980749F0686D946843E2A56 /* Debug */,
+				D468F298C6357FD4C55D0AAD07D7B406 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+}
