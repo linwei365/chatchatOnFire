@@ -182,6 +182,8 @@ class LoginViewController: UIViewController {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "IMG_1729")
         imageView.contentMode = .ScaleAspectFill
+        imageView.layer.cornerRadius = 20
+        imageView.layer.masksToBounds = true
       imageView.translatesAutoresizingMaskIntoConstraints = false
        
         //handle image profile on gesture touch

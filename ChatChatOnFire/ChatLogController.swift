@@ -19,7 +19,16 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
             observeMessages()
         }
     }
+    
+    var url: String?
+    var viewController:ViewController? {
+        didSet {
+             url = viewController?.profileImageUrl
+        }
+    }
+    
     var messages = [Message]()
+    
     func observeMessages( ) {
         guard let uid = FIRAuth.auth()?.currentUser?.uid else {
             return
@@ -56,36 +65,160 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
            
             }, withCancelBlock: nil)
     }
+    
    lazy var inputTextField:UITextField = {
         //create textField
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "type your message here"
+         textField.layer.cornerRadius = 4
+        textField.layer.masksToBounds = true
+    
+    let spacerView = UIView(frame:CGRect(x:0, y:0, width:10, height:10))
+    textField.leftViewMode = UITextFieldViewMode.Always
+    textField.leftView = spacerView
+    textField.backgroundColor = UIColor.whiteColor()
+    textField.layer.borderWidth = 1
+    textField.layer.borderColor = UIColor(r: 220, g: 220, b: 220).CGColor
+    
+   
         textField.delegate = self
         return textField
     }()
+    
     let cellId = "cellId"
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
+        collectionView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 80, right: 0)
+        collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 40, right: 0)
+        collectionView?.scrollsToTop = false
+       
         collectionView?.alwaysBounceVertical = true
         
         collectionView?.registerClass(ChatMessageCell.self, forCellWithReuseIdentifier: cellId )
-//        navigationItem.title = "chat log controller"
+
         collectionView?.backgroundColor = UIColor.whiteColor()
         setupChatInputArea()
+        
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ChatLogController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
     }
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        setupKeyboardObserver()
+    }
+    
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func setupKeyboardObserver( )  {
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleKeyboardWillAppear), name:UIKeyboardWillShowNotification, object: nil )
+    
+       NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleKeyboardWillHide), name:UIKeyboardWillHideNotification, object: nil )
+    
+    }
+    
+    func handleKeyboardWillAppear(notification: NSNotification)   {
+        
+        
+        let keyboardHeight = notification.userInfo?[UIKeyboardFrameEndUserInfoKey]?.CGRectValue()
+        let animationDuration =  notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey]?.doubleValue
+        
+             containerBottomAnchorConstraint?.constant = -(keyboardHeight?.height)!
+        UIView.animateWithDuration(animationDuration!) { 
+            self.view.layoutIfNeeded()
+        }
+   
+        
+    }
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+//        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func handleKeyboardWillHide(notification: NSNotification)   {
+        
+        let animationDuration =  notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey]?.doubleValue
+        
+        containerBottomAnchorConstraint?.constant = 0
+        UIView.animateWithDuration(animationDuration!) {
+            self.view.layoutIfNeeded()
+        }
+        
+    }
+    
+    
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        collectionView?.collectionViewLayout.invalidateLayout()
+    }
+    
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return messages.count
     }
+    
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell =  collectionView.dequeueReusableCellWithReuseIdentifier(cellId, forIndexPath: indexPath) as! ChatMessageCell
         
-        let message = messages[indexPath.item ]
+        let message = messages[indexPath.item]
         cell.textView.text = message.text
         cell.bubbleViewConstraintWith?.constant = estimateFrameForText(message.text!).width + 32
+       
+        
+        if let profileImageUrl = user!.profileImageUrl {
+            cell.profileImageView.loadImageUsingCacheWithUrlString(profileImageUrl)
+        } else {
+           cell.profileImageView.image = UIImage(named: "profile_teaser")
+        }
+
+        
+        if let profileImageUrl = url {
+            cell.profileImageViewB.loadImageUsingCacheWithUrlString(profileImageUrl)
+        } else {
+            cell.profileImageViewB.image = UIImage(named: "profile_teaser")
+        }
+        
+        
+        setupCell(cell, message: message)
+       
+        
          return cell
     }
+    
+    
+    
+    
+    
+    private func setupCell(cell: ChatMessageCell, message: Message)   {
+        if message.fromID == FIRAuth.auth()?.currentUser?.uid {
+            //blue
+            cell.bubbleView.backgroundColor = ChatMessageCell.blueBubbleColor
+            cell.textView.textColor = UIColor.whiteColor()
+            cell.bubbleViewLeftAnchorConstraint?.active = false
+            cell.bubbleViewRightAnchorConstraint?.active = true
+            cell.profileImageView.hidden = true
+            cell.profileImageViewB.hidden = false
+            
+            
+        } else {
+            cell.profileImageView.hidden = false
+            cell.profileImageViewB.hidden = true
+            //gray
+            cell.bubbleView.backgroundColor = ChatMessageCell.greyBubbleColor
+            cell.textView.textColor = UIColor.blackColor()
+             cell.bubbleViewLeftAnchorConstraint?.active = true
+             cell.bubbleViewRightAnchorConstraint?.active = false
+        }
+    }
+    
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         
@@ -106,6 +239,7 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         
     }
     
+    var containerBottomAnchorConstraint: NSLayoutConstraint?
     
     func setupChatInputArea( )  {
         //create UIView
@@ -118,10 +252,11 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         
         //add constraint x y width height
         container.leftAnchor.constraintEqualToAnchor(view.leftAnchor).active = true
-        container.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor).active = true
+      
         container.widthAnchor.constraintEqualToAnchor(view.widthAnchor ).active = true
         container.heightAnchor.constraintEqualToConstant(50).active = true
-        
+        containerBottomAnchorConstraint = container.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor)
+        containerBottomAnchorConstraint?.active = true
         //create a button
         let sendButton = UIButton(type: .System)
         sendButton.translatesAutoresizingMaskIntoConstraints = false
@@ -142,9 +277,9 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         
         //add constraint x y width height
         inputTextField.centerYAnchor.constraintEqualToAnchor(sendButton.centerYAnchor).active = true
-        inputTextField.rightAnchor.constraintEqualToAnchor(sendButton.leftAnchor).active = true
+        inputTextField.rightAnchor.constraintEqualToAnchor(sendButton.leftAnchor,constant: -8).active = true
         inputTextField.leftAnchor.constraintEqualToAnchor(container.leftAnchor, constant: 8).active = true
-        inputTextField.heightAnchor.constraintEqualToAnchor(sendButton.heightAnchor).active = true
+        inputTextField.heightAnchor.constraintEqualToAnchor(sendButton.heightAnchor,constant: -20).active = true
         
         //create UIView a line
         let seperatorLineView = UIView()
@@ -165,6 +300,9 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
     }
  
      func handleSendMessage()  {
+        if inputTextField.text == "" {
+            return
+        }
         
         let ref = FIRDatabase.database().reference().child("messages")
         let childRef = ref.childByAutoId()
@@ -191,12 +329,12 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
             
             
         }
-        
-        
-        
+ 
         
 //        print("send .... \(inputTextField.text)")
-//        inputTextField.text = ""
+        inputTextField.text = nil
+            
+       
     }
     
  

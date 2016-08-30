@@ -53,10 +53,10 @@ class ViewController: UITableViewController,LoginViewControllerDelegate {
                     
                     //                self.messages.append(message)
                     
-                    if let toID = message.toID {
+                    if let chatPartnerID = message.chatPartnerId() {
                         //passing the vaule align to the same key accordingly into dictionary
                         
-                        self.messagesDictionary[toID] = message
+                        self.messagesDictionary[chatPartnerID] = message
                         self.messages = Array(self.messagesDictionary.values)
                         
                         //sort
@@ -68,9 +68,10 @@ class ViewController: UITableViewController,LoginViewControllerDelegate {
                         
                     }
                     
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.tableView.reloadData()
-                    })
+                    
+                    print("load load load...............................")
+                    self.timer?.invalidate()
+                    self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
                     
                    
                     
@@ -85,7 +86,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate {
     
     
     // fetching messages
-     func observeMessages()  {
+    /* func observeMessages()  {
         let ref = FIRDatabase.database().reference().child("messages")
         ref.observeEventType(FIRDataEventType.ChildAdded, withBlock: { (snapshot) in
             
@@ -109,22 +110,28 @@ class ViewController: UITableViewController,LoginViewControllerDelegate {
                         
                         return message1.timeStamp?.intValue > message2.timeStamp?.intValue
                     })
-                    
-                    
+      
                 }
-                
-                dispatch_async(dispatch_get_main_queue(), { 
-                     self.tableView.reloadData()
-                })
-                
-        
+
                 
             }
-            
-            
             }, withCancelBlock: nil)
         
+    } */
+    
+    var timer: NSTimer?
+    
+    func handleReloadTable()  {
+        
+        dispatch_async(dispatch_get_main_queue(), {
+            print("reload table.....................................................")
+            self.tableView.reloadData()
+            
+            
+        })
+        
     }
+    
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let message = messages[indexPath.row]
@@ -219,8 +226,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate {
                 
                 
                 if let dictionary = snapshot.value as? [String:AnyObject]{
-                    
-//             self.navigationItem.title = dictionary["name"] as? String
+
                     
                     let user = User()
                     
@@ -236,6 +242,10 @@ class ViewController: UITableViewController,LoginViewControllerDelegate {
             
         }
     }
+    
+    
+    
+    var profileImageUrl:String?
     
     
     func setupNavigaionBarWithUser(user:User)  {
@@ -260,6 +270,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate {
         //create an imageView
         let profileImageView = UIImageView()
         if let profileImageUrl = user.profileImageUrl {
+            self.profileImageUrl = profileImageUrl
                profileImageView.loadImageUsingCacheWithUrlString(profileImageUrl)
         } else {
             profileImageView.image = UIImage(named: "profile_teaser")
