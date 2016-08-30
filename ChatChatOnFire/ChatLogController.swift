@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import FirebaseMessaging
 class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollectionViewDelegateFlowLayout {
    
     //this is new
@@ -330,18 +331,42 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         
         
     }
+    
+    
+    @IBAction func handleLogTokenTouch(sender: UIButton) {
+        // [START get_iid_token]
+        let token = FIRInstanceID.instanceID().token()
+        print("InstanceID token: \(token!)")
+        // [END get_iid_token]
+    }
+    
+    @IBAction func handleSubscribeTouch(sender: UIButton) {
+        // [START subscribe_topic]
+        FIRMessaging.messaging().subscribeToTopic("/topics/news")
+        print("Subscribed to news topic")
+        // [END subscribe_topic]
+    }
  
+    func sendPNMessage() {
+        FIRMessaging.messaging().sendMessage(
+            ["body": "hey"],
+            to: "TOKEN_ID",
+            withMessageID: "1",
+            timeToLive: 108)
+    }
+    
      func handleSendMessage()  {
         if inputTextField.text == "" {
             return
         }
-        
+        sendPNMessage()
         let ref = FIRDatabase.database().reference().child("messages")
         let childRef = ref.childByAutoId()
         let toID = user!.id!
         let fromID = FIRAuth.auth()!.currentUser!.uid
         let timeStamp:NSNumber = Int(NSDate().timeIntervalSince1970)
         let vaules = ["text":inputTextField.text!,"toID": toID, "fromID": fromID, "timeStamp":timeStamp]
+        
 //        childRef.updateChildValues(vaules)
         
         childRef.updateChildValues(vaules) { (error, ref) in

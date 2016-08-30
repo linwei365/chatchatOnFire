@@ -45,7 +45,7 @@ class ChatMessageCell: UICollectionViewCell {
         imageView.image = UIImage(named: "IMG_1729")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .ScaleAspectFill
-        imageView.layer.cornerRadius = 16
+        imageView.layer.cornerRadius = 25
         imageView.layer.masksToBounds = true
         return imageView
     }()
@@ -55,7 +55,7 @@ class ChatMessageCell: UICollectionViewCell {
         imageView.image = UIImage(named: "profile_teaser")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .ScaleAspectFill
-        imageView.layer.cornerRadius = 16
+        imageView.layer.cornerRadius = 25
         imageView.layer.masksToBounds = true
         return imageView
     }()
@@ -73,15 +73,15 @@ class ChatMessageCell: UICollectionViewCell {
         //add iso 9 constraint to View X Y width height
         profileImageViewB.rightAnchor.constraintEqualToAnchor(self.rightAnchor, constant: -8).active = true
         profileImageViewB.centerYAnchor.constraintEqualToAnchor(self.centerYAnchor).active = true
-        profileImageViewB.widthAnchor.constraintEqualToConstant(32).active = true
-        profileImageViewB.heightAnchor.constraintEqualToConstant(32).active = true
+        profileImageViewB.widthAnchor.constraintEqualToConstant(50).active = true
+        profileImageViewB.heightAnchor.constraintEqualToConstant(50).active = true
         
         
         //add iso 9 constraint to View X Y width height
         profileImageView.leftAnchor.constraintEqualToAnchor(self.leftAnchor, constant: 8).active = true
         profileImageView.centerYAnchor.constraintEqualToAnchor(self.centerYAnchor).active = true
-        profileImageView.widthAnchor.constraintEqualToConstant(32).active = true
-        profileImageView.heightAnchor.constraintEqualToConstant(32).active = true
+        profileImageView.widthAnchor.constraintEqualToConstant(50).active = true
+        profileImageView.heightAnchor.constraintEqualToConstant(50).active = true
         
         //ios 9 constraint x y width height
         bubbleViewRightAnchorConstraint = bubbleView.rightAnchor.constraintEqualToAnchor(profileImageViewB.leftAnchor,constant:  -8)

@@ -8,6 +8,8 @@ target 'ChatChatOnFire' do
   # Pods for ChatChatOnFire
     pod 'Firebase/Core'
     pod 'Firebase/Database'
+
+pod 'Firebase/Messaging'
 pod 'Firebase/Auth'
 pod 'Firebase/Storage'
 
