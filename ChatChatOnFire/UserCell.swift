@@ -32,11 +32,7 @@ class UserCell:UITableViewCell {
     }
     
    private func setupNameAndProfileImage()  {
-    
- 
-     
-    
-    
+
     if let id = message?.chatPartnerId() {
         //reference to that branch
         let ref = FIRDatabase.database().reference().child("users").child(id)

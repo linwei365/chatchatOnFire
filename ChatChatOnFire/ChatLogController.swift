@@ -170,8 +170,11 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         
         let message = messages[indexPath.item]
         cell.textView.text = message.text
+        
         cell.bubbleViewConstraintWith?.constant = estimateFrameForText(message.text!).width + 32
        
+        
+        
         
         if let profileImageUrl = user!.profileImageUrl {
             cell.profileImageView.loadImageUsingCacheWithUrlString(profileImageUrl)
@@ -180,11 +183,7 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         }
 
         
-        if let profileImageUrl = url {
-            cell.profileImageViewB.loadImageUsingCacheWithUrlString(profileImageUrl)
-        } else {
-            cell.profileImageViewB.image = UIImage(named: "profile_teaser")
-        }
+        setupNameAndProfileImageB(cell.profileImageViewB)
         
         
         setupCell(cell, message: message)
@@ -194,6 +193,39 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
     }
     
     
+    func setupNameAndProfileImageB(profileImageView: UIImageView)  {
+        
+        let uid = FIRAuth.auth()?.currentUser?.uid
+        
+        if let id = uid {
+            //reference to that branch
+            let ref = FIRDatabase.database().reference().child("users").child(id)
+            
+            ref.observeSingleEventOfType(FIRDataEventType.Value, withBlock: { (snapshot) in
+                
+                if let dictionary = snapshot.value as? [String: AnyObject]{
+                    
+          
+                    //load image
+                    if let profileImageUrl = dictionary["profileImageUrl"] as? String {
+                        
+                        
+                         profileImageView.loadImageUsingCacheWithUrlString(profileImageUrl)
+                        
+                    } else{
+                        
+                        //fix image changing if url string is nil
+                        profileImageView.image = UIImage(named: "profile_teaser")
+                    }
+                }
+                                
+                
+                print(snapshot)
+                
+                }, withCancelBlock: nil)
+            
+        }
+    }
     
     
     
