@@ -100,23 +100,106 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         collectionView?.alwaysBounceVertical = true
         
         collectionView?.registerClass(ChatMessageCell.self, forCellWithReuseIdentifier: cellId )
-
         collectionView?.backgroundColor = UIColor.whiteColor()
-        setupChatInputArea()
         
+        //keyboard 
         
+        collectionView?.keyboardDismissMode = .Interactive
+    
+//        setupChatInputArea()
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ChatLogController.dismissKeyboard))
         view.addGestureRecognizer(tap)
+        
+        
     }
     
+  //new inputSet up ........
+    
+    lazy var inputContainerView:UIView = {
+       
+        let containView = UIView ()
+        containView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50)
+        containView.backgroundColor = UIColor.whiteColor()
+        
+ 
+        
+        //add textfield to containVeiw
+        containView.addSubview(self.inputTextField)
+   
+        //create a button
+        let sendButton = UIButton(type: .System)
+        sendButton.translatesAutoresizingMaskIntoConstraints = false
+        sendButton.setTitle("Send", forState: .Normal)
+        sendButton.addTarget(self, action: #selector(handleSendMessage), forControlEvents: .TouchUpInside)
+        //add send button to the containView
+        containView.addSubview(sendButton)
+        
+        //add constraint x y width height
+        sendButton.centerYAnchor.constraintEqualToAnchor(containView.centerYAnchor).active = true
+        sendButton.rightAnchor.constraintEqualToAnchor(containView.rightAnchor).active = true
+        sendButton.heightAnchor.constraintEqualToAnchor(containView.heightAnchor).active = true
+        sendButton.widthAnchor.constraintEqualToConstant(60).active = true
+ 
+        //add constraint x y width height
+        self.inputTextField.centerYAnchor.constraintEqualToAnchor(sendButton.centerYAnchor).active = true
+        self.inputTextField.rightAnchor.constraintEqualToAnchor(sendButton.leftAnchor,constant: -8).active = true
+        self.inputTextField.leftAnchor.constraintEqualToAnchor(containView.leftAnchor, constant: 8).active = true
+        self.inputTextField.heightAnchor.constraintEqualToAnchor(sendButton.heightAnchor,constant: -20).active = true
+
+        
+        //create UIView a line
+        let seperatorLineView = UIView()
+        seperatorLineView.backgroundColor = UIColor(r: 220, g: 220, b: 220)
+        seperatorLineView.translatesAutoresizingMaskIntoConstraints = false
+        
+        //add subview to view
+        containView.addSubview(seperatorLineView)
+        
+        //add constraint x y width height
+        seperatorLineView.leftAnchor.constraintEqualToAnchor(containView.leftAnchor).active = true
+        seperatorLineView.topAnchor.constraintEqualToAnchor(containView.topAnchor).active = true
+        
+        seperatorLineView.widthAnchor.constraintEqualToAnchor(containView.widthAnchor).active = true
+        seperatorLineView.heightAnchor.constraintEqualToConstant(1).active = true
+        
+        
+        
+        
+        return containView
+    }()
+    
+    
+    override var inputAccessoryView: UIView? {
+        get {
+        
+            
+            return inputContainerView
+        }
+    }
+    override func canBecomeFirstResponder() -> Bool {
+        //can't see the inputAccessoryView until this returns true
+        return true
+    }
+    
+ 
+    
+    
+  //new inputset up end....
+    
+    
+    
+    
+        //textField begin edit action
     func textFieldDidBeginEditing(textField: UITextField) {
-        setupKeyboardObserver()
+//        setupKeyboardObserver()
+         inputAccessoryView!.endEditing(false)
     }
     
     func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
-        view.endEditing(true)
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+ 
+       
+//        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     func setupKeyboardObserver( )  {
@@ -252,7 +335,7 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         }
     }
     
-    
+    //adjust bounds when rotate screen
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         
         var height:CGFloat = 80
@@ -262,8 +345,11 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
             height = estimateFrameForText(text).height + 20
         }
         
-        return CGSize(width: view.frame.width, height: height)
+        let width = UIScreen.mainScreen().bounds.width
+        
+        return CGSize(width: width, height: height)
     }
+    
     private func estimateFrameForText(text: String) -> CGRect {
         let size = CGSize(width: 200, height: 1000)
         let options = NSStringDrawingOptions.UsesFontLeading.union(.UsesLineFragmentOrigin)
@@ -331,8 +417,9 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         
         
     }
+  
     
-    
+   /*
     @IBAction func handleLogTokenTouch(sender: UIButton) {
         // [START get_iid_token]
         let token = FIRInstanceID.instanceID().token()
@@ -346,20 +433,14 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         print("Subscribed to news topic")
         // [END subscribe_topic]
     }
+*/
  
-    func sendPNMessage() {
-        FIRMessaging.messaging().sendMessage(
-            ["body": "hey"],
-            to: "TOKEN_ID",
-            withMessageID: "1",
-            timeToLive: 108)
-    }
     
      func handleSendMessage()  {
         if inputTextField.text == "" {
             return
         }
-        sendPNMessage()
+        
         let ref = FIRDatabase.database().reference().child("messages")
         let childRef = ref.childByAutoId()
         let toID = user!.id!
