@@ -104,7 +104,6 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         
         //keyboard 
         
-        collectionView?.keyboardDismissMode = .Interactive
     
 //        setupChatInputArea()
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ChatLogController.dismissKeyboard))
@@ -119,7 +118,7 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
        
         let containView = UIView ()
         containView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50)
-        containView.backgroundColor = UIColor.whiteColor()
+        containView.backgroundColor = UIColor(r: 240, g: 240, b: 240)
         
  
         
@@ -183,21 +182,25 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
     
  
     
-    
   //new inputset up end....
     
-    
+ 
     
     
         //textField begin edit action
     func textFieldDidBeginEditing(textField: UITextField) {
 //        setupKeyboardObserver()
-         inputAccessoryView!.endEditing(false)
+        
+    }
+ 
+    override func scrollViewDidScroll(scrollView: UIScrollView) {
+          collectionView?.keyboardDismissMode = .Interactive
     }
     
     func dismissKeyboard() {
-        //Causes the view (or one of its embedded text fields) to resign the first responder status.
- 
+      collectionView?.keyboardDismissMode = .None
+     inputTextField.resignFirstResponder()
+   
        
 //        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
@@ -223,11 +226,7 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
    
         
     }
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
-//        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
+ 
     
     func handleKeyboardWillHide(notification: NSNotification)   {
         
