@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 import FirebaseMessaging
-class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollectionViewDelegateFlowLayout {
+class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
    
     //this is new
     //the user is set from viewController passed by NewMessageTableViewController
@@ -109,6 +109,16 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
   //new inputSet up ........
     
     lazy var inputContainerView:UIView = {
@@ -117,8 +127,21 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         containView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50)
         containView.backgroundColor = UIColor(r: 240, g: 240, b: 240)
         
- 
+        //create imageView
+        let uploadImageView = UIImageView()
+        uploadImageView.image = UIImage(named: "picA")
+        uploadImageView.translatesAutoresizingMaskIntoConstraints = false
         
+        //add uploadImageView to containView
+        containView.addSubview(uploadImageView)
+        
+        //add constraint x y width height
+        uploadImageView.leftAnchor.constraintEqualToAnchor(containView.leftAnchor,constant: 4).active = true
+        uploadImageView.centerYAnchor.constraintEqualToAnchor(containView.centerYAnchor).active = true
+        uploadImageView.widthAnchor.constraintEqualToConstant(40).active = true
+        uploadImageView.heightAnchor.constraintEqualToConstant(40).active = true
+        uploadImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleProfileImageView)))
+        uploadImageView.userInteractionEnabled = true
         //add textfield to containVeiw
         containView.addSubview(self.inputTextField)
    
@@ -139,7 +162,7 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         //add constraint x y width height
         self.inputTextField.centerYAnchor.constraintEqualToAnchor(sendButton.centerYAnchor).active = true
         self.inputTextField.rightAnchor.constraintEqualToAnchor(sendButton.leftAnchor,constant: -8).active = true
-        self.inputTextField.leftAnchor.constraintEqualToAnchor(containView.leftAnchor, constant: 8).active = true
+        self.inputTextField.leftAnchor.constraintEqualToAnchor(uploadImageView.rightAnchor, constant: 8).active = true
         self.inputTextField.heightAnchor.constraintEqualToAnchor(sendButton.heightAnchor,constant: -20).active = true
 
         
@@ -163,6 +186,64 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         
         return containView
     }()
+    
+    func handleUploadImage( )  {
+         print("upload imaeg....")
+    }
+    
+    //handle image picker ........
+    
+    //handle image picker controller
+    func handleProfileImageView ( )    {
+        
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        //gives crop operation
+        picker.allowsEditing = true
+        presentViewController(picker, animated: true, completion: nil)
+        
+        
+    }
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        print("canceled picker ")
+        dismissViewControllerAnimated(true, completion: nil)
+        
+    }
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        
+        var selectedImage:UIImage?
+        
+        if let editedImage = info ["UIImagePickerControllerEditedImage"] as? UIImage {
+            
+            
+            selectedImage = editedImage
+            
+        } else if let originalImage = info["UIImagePickerControllerOriginalImage"] as? UIImage{
+            
+            selectedImage = originalImage
+            
+        }
+        
+        if let image = selectedImage {
+            
+                     //output
+        }
+        
+        dismissViewControllerAnimated(true, completion: nil)
+        
+        
+    }
+    
+    
+    
+    //handle imagepicker end .....
+    
+    
+    
+    
+    
+    
     
     
     override var inputAccessoryView: UIView? {

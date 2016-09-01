@@ -21,7 +21,7 @@ extension LoginViewController: UIImagePickerControllerDelegate, UINavigationCont
         picker.allowsEditing = true
         presentViewController(picker, animated: true, completion: nil)
         
-        print("12")
+       
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
@@ -101,7 +101,7 @@ extension LoginViewController: UIImagePickerControllerDelegate, UINavigationCont
                      print(metadata?.downloadURL())
                     if let userProfileImageUrl = metadata?.downloadURL()?.absoluteString {
                         
-                        let values = ["name": name, "email": email, "profileImageUrl": userProfileImageUrl]
+                        let values = ["name": name, "email": email, "profileImageUrl": userProfileImageUrl,"imageUID":imageName]
                         self.registerUserToFireDatabaseWithParameters(uid, values: values)
                     }
                     

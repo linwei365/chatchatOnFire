@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class ViewController: UITableViewController,LoginViewControllerDelegate {
+class ViewController: UITableViewController,LoginViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     var messages = [Message]()
     var messagesDictionary =  [String: Message]()
@@ -234,7 +234,12 @@ class ViewController: UITableViewController,LoginViewControllerDelegate {
     
     
     var profileImageUrl:String?
-    
+    lazy var profileImageView : UIImageView = {
+       let imageView = UIImageView()
+        
+        return imageView
+        
+    }()
     
     func setupNavigaionBarWithUser(user:User)  {
         messages.removeAll()
@@ -256,7 +261,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate {
         titleView.addSubview(containerView)
         
         //create an imageView
-        let profileImageView = UIImageView()
+         
         if let profileImageUrl = user.profileImageUrl {
             self.profileImageUrl = profileImageUrl
                profileImageView.loadImageUsingCacheWithUrlString(profileImageUrl)
@@ -295,10 +300,93 @@ class ViewController: UITableViewController,LoginViewControllerDelegate {
         
         //set UIView to navi title view
         self.navigationItem.titleView = titleView
-//        titleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showChatController)))
+       titleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleProfileImageView)))
         titleView.userInteractionEnabled = true
         
     }
+    
+    
+    
+    
+    //handle image picker ........
+    
+    //handle image picker controller
+    func handleProfileImageView ( )    {
+        
+        let picker = UIImagePickerController()
+  
+        picker.delegate = self
+        //gives crop operation
+        picker.allowsEditing = true
+        presentViewController(picker, animated: true, completion: nil)
+        
+        
+    }
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        print("canceled picker ")
+        dismissViewControllerAnimated(true, completion: nil)
+        
+    }
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        
+        var selectedImage:UIImage?
+        
+        if let editedImage = info ["UIImagePickerControllerEditedImage"] as? UIImage {
+            
+            
+            selectedImage = editedImage
+            
+        } else if let originalImage = info["UIImagePickerControllerOriginalImage"] as? UIImage{
+            
+            selectedImage = originalImage
+            
+        }
+        
+        if let image = selectedImage {
+            
+            let uid = FIRAuth.auth()?.currentUser?.uid
+            
+             FIRDatabase.database().reference().child("users").child(uid!).observeEventType(.ChildAdded, withBlock: { (snapshot) in
+                
+                let user = snapshot.key
+                
+                print(user)
+                
+//                         let storageRef = FIRStorage.storage().reference().child("Profile_Images").child("\(user?.imageUID).jpg")
+                return
+                
+                }, withCancelBlock: nil)
+            
+
+            
+            //output needs to save out the image
+        }
+        
+        dismissViewControllerAnimated(true, completion: nil)
+        
+        
+    }
+    
+    
+    //handle save image
+    
+    func saveImage()  {
+        
+      
+        
+    }
+    
+    
+    
+    
+    
+    
+    //handle imagepicker end .....
+    
+    
+    
+    
     
     func showChatControllerForUser(user:User)  {
         
