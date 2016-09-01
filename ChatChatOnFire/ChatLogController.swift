@@ -31,11 +31,11 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
     var messages = [Message]()
     
     func observeMessages( ) {
-        guard let uid = FIRAuth.auth()?.currentUser?.uid else {
+        guard let uid = FIRAuth.auth()?.currentUser?.uid, toID = user?.id else {
             return
         }
         
-         let userMessagesRef = FIRDatabase.database().reference().child("user-messages").child(uid)
+         let userMessagesRef = FIRDatabase.database().reference().child("user-messages").child(uid).child(toID )
         userMessagesRef.observeEventType(.ChildAdded, withBlock: { (snapshot) in
             
             let messageId = snapshot.key
@@ -101,11 +101,8 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         
         collectionView?.registerClass(ChatMessageCell.self, forCellWithReuseIdentifier: cellId )
         collectionView?.backgroundColor = UIColor.whiteColor()
-        
-        //keyboard 
-        
-    
-//        setupChatInputArea()
+ 
+ 
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ChatLogController.dismissKeyboard))
         view.addGestureRecognizer(tap)
         
@@ -359,80 +356,6 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
     
     var containerBottomAnchorConstraint: NSLayoutConstraint?
     
-    func setupChatInputArea( )  {
-        //create UIView
-        let container = UIView()
-        container.backgroundColor = UIColor(r: 240, g: 240, b: 240)
-        container.translatesAutoresizingMaskIntoConstraints = false
-        
-        //add container to view
-        view.addSubview(container)
-        
-        //add constraint x y width height
-        container.leftAnchor.constraintEqualToAnchor(view.leftAnchor).active = true
-      
-        container.widthAnchor.constraintEqualToAnchor(view.widthAnchor ).active = true
-        container.heightAnchor.constraintEqualToConstant(50).active = true
-        containerBottomAnchorConstraint = container.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor)
-        containerBottomAnchorConstraint?.active = true
-        //create a button
-        let sendButton = UIButton(type: .System)
-        sendButton.translatesAutoresizingMaskIntoConstraints = false
-        sendButton.setTitle("Send", forState: .Normal)
-        sendButton.addTarget(self, action: #selector(handleSendMessage), forControlEvents: .TouchUpInside)
-        //add send button to the container
-        container.addSubview(sendButton)
-        
-        //add constraint x y width height
-        sendButton.centerYAnchor.constraintEqualToAnchor(container.centerYAnchor).active = true
-        sendButton.rightAnchor.constraintEqualToAnchor(container.rightAnchor).active = true
-        sendButton.heightAnchor.constraintEqualToAnchor(container.heightAnchor).active = true
-        sendButton.widthAnchor.constraintEqualToConstant(60).active = true
-        
-       
-         //add inputTextField to container
-         container.addSubview(inputTextField)
-        
-        //add constraint x y width height
-        inputTextField.centerYAnchor.constraintEqualToAnchor(sendButton.centerYAnchor).active = true
-        inputTextField.rightAnchor.constraintEqualToAnchor(sendButton.leftAnchor,constant: -8).active = true
-        inputTextField.leftAnchor.constraintEqualToAnchor(container.leftAnchor, constant: 8).active = true
-        inputTextField.heightAnchor.constraintEqualToAnchor(sendButton.heightAnchor,constant: -20).active = true
-        
-        //create UIView a line
-        let seperatorLineView = UIView()
-        seperatorLineView.backgroundColor = UIColor(r: 220, g: 220, b: 220)
-        seperatorLineView.translatesAutoresizingMaskIntoConstraints = false
-        
-        //add subview to view
-        container.addSubview(seperatorLineView)
-        
-        //add constraint x y width height
-        seperatorLineView.leftAnchor.constraintEqualToAnchor(container.leftAnchor).active = true
-        seperatorLineView.topAnchor.constraintEqualToAnchor(container.topAnchor).active = true
-        
-        seperatorLineView.widthAnchor.constraintEqualToAnchor(container.widthAnchor).active = true
-        seperatorLineView.heightAnchor.constraintEqualToConstant(1).active = true
-        
-        
-    }
-  
-    
-   /*
-    @IBAction func handleLogTokenTouch(sender: UIButton) {
-        // [START get_iid_token]
-        let token = FIRInstanceID.instanceID().token()
-        print("InstanceID token: \(token!)")
-        // [END get_iid_token]
-    }
-    
-    @IBAction func handleSubscribeTouch(sender: UIButton) {
-        // [START subscribe_topic]
-        FIRMessaging.messaging().subscribeToTopic("/topics/news")
-        print("Subscribed to news topic")
-        // [END subscribe_topic]
-    }
-*/
  
     
      func handleSendMessage()  {
@@ -455,12 +378,12 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
                 return
             }
             //create a ref
-            let userMessageRef = FIRDatabase.database().reference().child("user-messages").child(fromID)
+            let userMessageRef = FIRDatabase.database().reference().child("user-messages").child(fromID).child(toID)
             let messageId = childRef.key
             //update a dictiontary at this refefence path
             userMessageRef.updateChildValues([messageId : 1])
             
-            let recipientUserRef = FIRDatabase.database().reference().child("user-messages").child(toID)
+            let recipientUserRef = FIRDatabase.database().reference().child("user-messages").child(toID).child(fromID)
             recipientUserRef.updateChildValues([messageId : 1])
             
             

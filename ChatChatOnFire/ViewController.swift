@@ -37,94 +37,82 @@ class ViewController: UITableViewController,LoginViewControllerDelegate {
         let ref = FIRDatabase.database().reference().child("user-messages").child(uid)
         ref.observeEventType(.ChildAdded, withBlock: { (snapshot:FIRDataSnapshot) in
         
-         let messageId = snapshot.key
-            let messagesReference = FIRDatabase.database().reference().child("messages").child(messageId)
-            messagesReference.observeSingleEventOfType(.Value, withBlock: { (snapshot:FIRDataSnapshot) in
-            
+         let userID = snapshot.key
            
+            print(userID)
+            
+            
+            
+            FIRDatabase.database().reference().child("user-messages").child(uid).child(userID).observeEventType(.ChildAdded, withBlock: { (snapshot) in
+              
                 
+                let messageId = snapshot.key
                 
-                if let dicionary = snapshot.value as? [String: AnyObject]{
+                print(messageId)
+                
+              
+                
+                let messagesReference = FIRDatabase.database().reference().child("messages").child(messageId)
+                messagesReference.observeSingleEventOfType(.Value, withBlock: { (snapshot:FIRDataSnapshot) in
                     
-                    let message = Message()
                     
                     
-                    message.setValuesForKeysWithDictionary(dicionary)
                     
-                    //                self.messages.append(message)
-                    
-                    if let chatPartnerID = message.chatPartnerId() {
-                        //passing the vaule align to the same key accordingly into dictionary
+                    if let dicionary = snapshot.value as? [String: AnyObject]{
                         
-                        self.messagesDictionary[chatPartnerID] = message
-                        self.messages = Array(self.messagesDictionary.values)
+                        let message = Message()
                         
-                        //sort
-                        self.messages.sortInPlace({ (message1, message2) -> Bool in
+                        
+                        message.setValuesForKeysWithDictionary(dicionary)
+                        
+                        //                self.messages.append(message)
+                        
+                        if let chatPartnerID = message.chatPartnerId() {
+                            //passing the vaule align to the same key accordingly into dictionary
                             
-                            return message1.timeStamp?.intValue > message2.timeStamp?.intValue
-                        })
+                            self.messagesDictionary[chatPartnerID] = message
+
+                            
+                            
+                        }
+                        
+            
+                        self.timer?.invalidate()
+                        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
                         
                         
-                    }
+                        
+                    } 
                     
-                    
-                    print("load load load...............................")
-                    self.timer?.invalidate()
-                    self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
-                    
-                   
-                    
-                } 
+                    }, withCancelBlock: nil)
+            
                 
                 }, withCancelBlock: nil)
+            
+    
             
             
             }, withCancelBlock: nil)
     }
     
-    
-    
-    // fetching messages
-    /* func observeMessages()  {
-        let ref = FIRDatabase.database().reference().child("messages")
-        ref.observeEventType(FIRDataEventType.ChildAdded, withBlock: { (snapshot) in
-            
-            if let dicionary = snapshot.value as? [String: AnyObject]{
-                
-                let message = Message()
-                
-                
-                message.setValuesForKeysWithDictionary(dicionary)
-                
-//                self.messages.append(message)
-                
-                if let toID = message.toID {
-                    //passing the vaule align to the same key accordingly into dictionary
-                    
-                    self.messagesDictionary[toID] = message
-                    self.messages = Array(self.messagesDictionary.values)
-                  
-                    //sort
-                    self.messages.sortInPlace({ (message1, message2) -> Bool in
-                        
-                        return message1.timeStamp?.intValue > message2.timeStamp?.intValue
-                    })
-      
-                }
-
-                
-            }
-            }, withCancelBlock: nil)
-        
-    } */
+ 
     
     var timer: NSTimer?
     
     func handleReloadTable()  {
         
+        
+        self.messages = Array(self.messagesDictionary.values)
+        
+        //sort
+        self.messages.sortInPlace({ (message1, message2) -> Bool in
+            
+            return message1.timeStamp?.intValue > message2.timeStamp?.intValue
+        })
+        
+        
         dispatch_async(dispatch_get_main_queue(), {
-            print("reload table.....................................................")
+          
             self.tableView.reloadData()
             
             
