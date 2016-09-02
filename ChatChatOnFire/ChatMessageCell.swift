@@ -27,7 +27,7 @@ class ChatMessageCell: UICollectionViewCell {
     let bubbleView: UIView = {
         
         let view = UIView()
-        view.backgroundColor = blueBubbleColor
+//        view.backgroundColor = blueBubbleColor
         view.translatesAutoresizingMaskIntoConstraints = false
         
         view.layer.cornerRadius = 16
@@ -50,6 +50,8 @@ class ChatMessageCell: UICollectionViewCell {
         return imageView
     }()
     
+    
+    
     let profileImageViewB:UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "profile_teaser")
@@ -60,15 +62,35 @@ class ChatMessageCell: UICollectionViewCell {
         return imageView
     }()
     
+    let messageImage:UIImageView = {
+        let imageView = UIImageView()
+     
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .ScaleAspectFill
+        imageView.layer.cornerRadius = 16
+        imageView.layer.masksToBounds = true
+        
+        
+        return imageView
+    }()
+    
+    
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(bubbleView)
-        
-         addSubview(textView)
-       
+        addSubview(textView)
         addSubview(profileImageView)
         addSubview(profileImageViewB)
+        
+        bubbleView.addSubview(messageImage)
+        
+        //add iso 9 constraint to View X Y width height
+        messageImage.topAnchor.constraintEqualToAnchor(bubbleView.topAnchor).active = true
+        messageImage.leftAnchor.constraintEqualToAnchor(bubbleView.leftAnchor).active = true
+        messageImage.bottomAnchor.constraintEqualToAnchor(bubbleView.bottomAnchor).active = true
+        messageImage.rightAnchor.constraintEqualToAnchor(bubbleView.rightAnchor).active = true
         
         //add iso 9 constraint to View X Y width height
         profileImageViewB.rightAnchor.constraintEqualToAnchor(self.rightAnchor, constant: -8).active = true

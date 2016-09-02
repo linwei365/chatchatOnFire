@@ -47,8 +47,8 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
                     return
                 }
                 
-                let message = Message()
-                message.setValuesForKeysWithDictionary(dictionary)
+                let message = Message(dictionary: dictionary)
+               
                 
                 if message.chatPartnerId() == self.user?.id {
                     
@@ -56,6 +56,8 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
                     
                     dispatch_async(dispatch_get_main_queue(), {
                         self.collectionView?.reloadData()
+                        
+                        self.scrollToLastIndext()
                     })
 
                 }
@@ -65,6 +67,15 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
             
            
             }, withCancelBlock: nil)
+    }
+    
+    func scrollToLastIndext()  {
+        if messages.count > 0 {
+            let indexPath = NSIndexPath(forItem: messages.count-1, inSection: 0)
+            self.collectionView?.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Bottom, animated: true)
+        }
+        
+    
     }
     
    lazy var inputTextField:UITextField = {
@@ -93,8 +104,7 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 80, right: 0)
-        collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 40, right: 0)
+        collectionView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
         collectionView?.scrollsToTop = false
        
         collectionView?.alwaysBounceVertical = true
@@ -109,14 +119,7 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
+
     
     
   //new inputSet up ........
@@ -186,11 +189,7 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         
         return containView
     }()
-    
-    func handleUploadImage( )  {
-         print("upload imaeg....")
-    }
-    
+ 
     //handle image picker ........
     
     //handle image picker controller
@@ -207,9 +206,11 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         print("canceled picker ")
+        
         dismissViewControllerAnimated(true, completion: nil)
         
     }
+    
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         
         var selectedImage:UIImage?
@@ -227,11 +228,76 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         
         if let image = selectedImage {
             
+            uploadImageToFirebaseStorage(image)
                      //output
         }
         
         dismissViewControllerAnimated(true, completion: nil)
         
+        
+    }
+    
+    private func uploadImageToFirebaseStorage(image: UIImage){
+        
+        let imageName = NSUUID().UUIDString
+        let storageRef = FIRStorage.storage().reference().child("message_images").child(imageName)
+       
+        if let uploadData = UIImageJPEGRepresentation(image, 0.1){
+            
+            storageRef.putData(uploadData, metadata: nil, completion: { (metaData, error) in
+                
+                if (error != nil){
+                    print(error)
+                    return
+                }
+                
+                if let imageUrl = metaData?.downloadURL()?.absoluteString{
+                    
+                    self.uploadImageWithUrl(imageUrl,image: UIImage(data: uploadData)!)
+                }
+                print(metaData?.downloadURL()?.absoluteString)
+                
+            })
+        }
+        
+        
+        
+      
+        
+        
+        
+        print("upldate image")
+    }
+    
+    
+    private func uploadImageWithUrl(imageURL: String ,image:UIImage) {
+        
+        let ref = FIRDatabase.database().reference().child("messages")
+        let childRef = ref.childByAutoId()
+        let toID = user!.id!
+        let fromID = FIRAuth.auth()!.currentUser!.uid
+        let timeStamp:NSNumber = Int(NSDate().timeIntervalSince1970)
+        let vaules = ["toID": toID, "fromID": fromID, "timeStamp":timeStamp ,"imageUrl":imageURL,"imageWidth":image.size.width,"imageHeight":image.size.height,]
+        
+        //        childRef.updateChildValues(vaules)
+        
+        childRef.updateChildValues(vaules) { (error, ref) in
+            if error != nil {
+                print(error)
+                return
+            }
+            //create a ref
+            let userMessageRef = FIRDatabase.database().reference().child("user-messages").child(fromID).child(toID)
+            let messageId = childRef.key
+            //update a dictiontary at this refefence path
+            userMessageRef.updateChildValues([messageId : 1])
+            
+            let recipientUserRef = FIRDatabase.database().reference().child("user-messages").child(toID).child(fromID)
+            recipientUserRef.updateChildValues([messageId : 1])
+            
+        }
+        
+
         
     }
     
@@ -267,7 +333,7 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
     
         //textField begin edit action
     func textFieldDidBeginEditing(textField: UITextField) {
-//        setupKeyboardObserver()
+      setupKeyboardObserver()
         
     }
  
@@ -280,15 +346,22 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
      inputTextField.resignFirstResponder()
    
        
-//        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     func setupKeyboardObserver( )  {
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleKeyboadDidShow), name: UIKeyboardDidShowNotification, object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleKeyboardWillAppear), name:UIKeyboardWillShowNotification, object: nil )
+//        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleKeyboardWillAppear), name:UIKeyboardWillShowNotification, object: nil )
+//    
+//       NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleKeyboardWillHide), name:UIKeyboardWillHideNotification, object: nil )
     
-       NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleKeyboardWillHide), name:UIKeyboardWillHideNotification, object: nil )
+    }
     
+    func handleKeyboadDidShow(notification: NSNotification)  {
+        
+        scrollToLastIndext()
     }
     
     func handleKeyboardWillAppear(notification: NSNotification)   {
@@ -329,14 +402,37 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell =  collectionView.dequeueReusableCellWithReuseIdentifier(cellId, forIndexPath: indexPath) as! ChatMessageCell
         
+        
+        
         let message = messages[indexPath.item]
         cell.textView.text = message.text
+         cell.bubbleView.backgroundColor = UIColor.clearColor()
+        if let messageImageUrl =  message.imageUrl {
+            cell.messageImage.loadImageUsingCacheWithUrlString(messageImageUrl)
+        cell.messageImage.hidden = false
+       
+            
+        }
+        else {
+             cell.messageImage.hidden = true
+//            cell.bubbleView.backgroundColor = ChatMessageCell.blueBubbleColor
+          }
         
-        cell.bubbleViewConstraintWith?.constant = estimateFrameForText(message.text!).width + 32
+        
+        
+        if let text = message.text {
+            
+             cell.bubbleViewConstraintWith?.constant = estimateFrameForText(text).width + 32
+            
+        } else if (message.imageUrl != nil) {
+            
+                cell.bubbleViewConstraintWith?.constant = 200
+        }
+        
        
         
         
-        
+ 
         if let profileImageUrl = user!.profileImageUrl {
             cell.profileImageView.loadImageUsingCacheWithUrlString(profileImageUrl)
         } else {
@@ -393,22 +489,35 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
     private func setupCell(cell: ChatMessageCell, message: Message)   {
         if message.fromID == FIRAuth.auth()?.currentUser?.uid {
             //blue
-            cell.bubbleView.backgroundColor = ChatMessageCell.blueBubbleColor
-            cell.textView.textColor = UIColor.whiteColor()
-            cell.bubbleViewLeftAnchorConstraint?.active = false
-            cell.bubbleViewRightAnchorConstraint?.active = true
+        
+            
+            if message.text != nil {
+                cell.bubbleView.backgroundColor = ChatMessageCell.blueBubbleColor
+                cell.textView.textColor = UIColor.whiteColor()
+                cell.bubbleViewLeftAnchorConstraint?.active = false
+                cell.bubbleViewRightAnchorConstraint?.active = true
+           
+            }
+          
             cell.profileImageView.hidden = true
             cell.profileImageViewB.hidden = false
             
-            
         } else {
-            cell.profileImageView.hidden = false
-            cell.profileImageViewB.hidden = true
-            //gray
-            cell.bubbleView.backgroundColor = ChatMessageCell.greyBubbleColor
-            cell.textView.textColor = UIColor.blackColor()
-             cell.bubbleViewLeftAnchorConstraint?.active = true
-             cell.bubbleViewRightAnchorConstraint?.active = false
+            
+            if message.text != nil {
+                cell.profileImageView.hidden = false
+                cell.profileImageViewB.hidden = true
+                //gray
+                cell.bubbleView.backgroundColor = ChatMessageCell.greyBubbleColor
+                cell.textView.textColor = UIColor.blackColor()
+            }
+            
+        
+
+                cell.bubbleViewLeftAnchorConstraint?.active = true
+                cell.bubbleViewRightAnchorConstraint?.active = false
+
+        
         }
     }
     
@@ -418,9 +527,16 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         var height:CGFloat = 80
         
         //estimate height
-        if let text = messages[indexPath.item].text {
+        let message = messages[indexPath.item]
+        if let text = message.text {
             height = estimateFrameForText(text).height + 20
         }
+        else if let imageHeight = message.imageHeight?.floatValue, imageWidth = message.imageWidth?.floatValue {
+          
+            height = CGFloat(imageHeight/imageWidth*200)
+            
+        }
+        
         
         let width = UIScreen.mainScreen().bounds.width
         

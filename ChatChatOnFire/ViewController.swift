@@ -60,10 +60,10 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
                     
                     if let dicionary = snapshot.value as? [String: AnyObject]{
                         
-                        let message = Message()
+                        let message = Message(dictionary: dicionary)
                         
                         
-                        message.setValuesForKeysWithDictionary(dicionary)
+                      
                         
                         //                self.messages.append(message)
                         

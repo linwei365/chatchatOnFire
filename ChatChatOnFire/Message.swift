@@ -15,9 +15,27 @@ class Message: NSObject {
     var text: String?
     var timeStamp: NSNumber?
     var toID: String?
+    var imageUrl: String?
+    var imageHeight: NSNumber?
+    var imageWidth: NSNumber?
+    
     
     func chatPartnerId() -> String? {
         return fromID == FIRAuth.auth()?.currentUser?.uid ? toID : fromID
         
+    }
+    
+    
+    init(dictionary:[String: AnyObject]) {
+        super.init()
+        fromID = dictionary["fromID"] as? String
+        text = dictionary["text"] as? String
+        toID = dictionary["toID"] as? String
+        imageUrl = dictionary["imageUrl"] as? String
+        
+        imageWidth = dictionary["imageWidth"] as? NSNumber
+        imageHeight = dictionary["imageHeight"] as? NSNumber
+         timeStamp = dictionary["timeStamp"] as? NSNumber
+         
     }
 }
