@@ -38,18 +38,14 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         ref.observeEventType(.ChildAdded, withBlock: { (snapshot:FIRDataSnapshot) in
         
          let userID = snapshot.key
-           
-            print(userID)
-            
+  
             
             
             FIRDatabase.database().reference().child("user-messages").child(uid).child(userID).observeEventType(.ChildAdded, withBlock: { (snapshot) in
               
                 
                 let messageId = snapshot.key
-                
-                print(messageId)
-                
+ 
               
                 
                 let messagesReference = FIRDatabase.database().reference().child("messages").child(messageId)
@@ -394,8 +390,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         
         chatLogViewController.user = user
         navigationController?.pushViewController(chatLogViewController, animated: true)
-        
-        print("tapped")
+  
     }
 
     //present login controller

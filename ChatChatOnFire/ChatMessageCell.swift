@@ -9,7 +9,9 @@
 import UIKit
 
 class ChatMessageCell: UICollectionViewCell {
-
+    
+    var chatLogController: ChatLogController?
+    
     let textView:UITextView = {
          let tV = UITextView()
        
@@ -62,19 +64,27 @@ class ChatMessageCell: UICollectionViewCell {
         return imageView
     }()
     
-    let messageImage:UIImageView = {
+  lazy var messageImage:UIImageView = {
         let imageView = UIImageView()
      
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .ScaleAspectFill
         imageView.layer.cornerRadius = 16
         imageView.layer.masksToBounds = true
+        imageView.userInteractionEnabled = true
         
-        
+    imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomImage)))
         return imageView
     }()
     
-    
+    func handleZoomImage(tapGesture: UITapGestureRecognizer)   {
+        
+        if let imageView = tapGesture.view as? UIImageView {
+        
+            self.chatLogController?.peformZoomImageView(imageView)
+         }
+        
+    }
     
     
     override init(frame: CGRect) {

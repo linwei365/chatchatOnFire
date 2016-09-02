@@ -42,7 +42,7 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
             let messagesRef = FIRDatabase.database().reference().child("messages").child(messageId)
             messagesRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
                 
-                 print(snapshot)
+                
                 guard let dictionary =  snapshot.value as? [String: AnyObject] else {
                     return
                 }
@@ -205,7 +205,7 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        print("canceled picker ")
+        
         
         dismissViewControllerAnimated(true, completion: nil)
         
@@ -255,18 +255,11 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
                     
                     self.uploadImageWithUrl(imageUrl,image: UIImage(data: uploadData)!)
                 }
-                print(metaData?.downloadURL()?.absoluteString)
+                
                 
             })
         }
-        
-        
-        
-      
-        
-        
-        
-        print("upldate image")
+ 
     }
     
     
@@ -304,13 +297,7 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
     
     
     //handle imagepicker end .....
-    
-    
-    
-    
-    
-    
-    
+
     
     override var inputAccessoryView: UIView? {
         get {
@@ -323,13 +310,7 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         //can't see the inputAccessoryView until this returns true
         return true
     }
-    
- 
-    
-  //new inputset up end....
-    
- 
-    
+
     
         //textField begin edit action
     func textFieldDidBeginEditing(textField: UITextField) {
@@ -402,7 +383,7 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell =  collectionView.dequeueReusableCellWithReuseIdentifier(cellId, forIndexPath: indexPath) as! ChatMessageCell
         
-        
+        cell.chatLogController = self
         
         let message = messages[indexPath.item]
         cell.textView.text = message.text
@@ -423,9 +404,10 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         if let text = message.text {
             
              cell.bubbleViewConstraintWith?.constant = estimateFrameForText(text).width + 32
+            cell.textView.hidden = false
             
         } else if (message.imageUrl != nil) {
-            
+             cell.textView.hidden = true
                 cell.bubbleViewConstraintWith?.constant = 200
         }
         
@@ -475,10 +457,7 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
                         profileImageView.image = UIImage(named: "profile_teaser")
                     }
                 }
-                                
-                
-                print(snapshot)
-                
+ 
                 }, withCancelBlock: nil)
             
         }
@@ -587,8 +566,6 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
             
         }
  
-        
-//        print("send .... \(inputTextField.text)")
         inputTextField.text = nil
             
        
@@ -602,6 +579,78 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
        return true
     }
     
+    
+    //perform zoom in logic
+    var startingImageFrame: CGRect?
+    var backGround: UIView?
+    var startImageView: UIImageView?
+    
+    func peformZoomImageView(imageView:UIImageView)  {
+        
+          startImageView = imageView
+          startingImageFrame = imageView.superview?.convertRect(imageView.frame, toView: nil)
+       
+        startImageView?.hidden = true
+        let zoomingView =  UIImageView(frame: startingImageFrame!)
+        zoomingView.backgroundColor = UIColor.blackColor()
+        zoomingView.image = imageView.image
+        zoomingView.userInteractionEnabled = true
+        zoomingView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomOut)))
+        zoomingView.layer.cornerRadius = 16
+        zoomingView.layer.masksToBounds = true
+        
+        
+        if let keyWindow =  UIApplication.sharedApplication().keyWindow{
+               backGround = UIView(frame: keyWindow.frame)
+            backGround?.backgroundColor = UIColor.blackColor()
+            backGround?.alpha = 0
+            
+             keyWindow.addSubview(backGround!)
+            keyWindow.addSubview(zoomingView)
+            
+           UIView.animateWithDuration(0.5, delay: 0, options: .CurveEaseOut, animations: {
+            self.backGround?.alpha = 1
+            
+            self.inputContainerView.alpha = 0
+            
+            
+            }, completion: nil)
+            
+            UIView.animateWithDuration(0.5, delay: 0, options: .CurveEaseOut, animations: { 
+                
+                let height = self.startingImageFrame!.height / self.startingImageFrame!.width * keyWindow.frame.width
+                
+                zoomingView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
+                zoomingView.center = keyWindow.center
+                
+                }, completion: nil)
+        }
+
+        
+    }
+    func handleZoomOut(tapGesture: UITapGestureRecognizer)  {
+        
+        if let zoomOutImageView = tapGesture.view {
+            
+        
+            
+            UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .CurveEaseOut, animations: {
+                zoomOutImageView.frame = self.startingImageFrame!
+                
+                self.backGround?.alpha = 0
+                self.inputContainerView.alpha = 1
+                zoomOutImageView.layer.cornerRadius = 16
+                zoomOutImageView.layer.masksToBounds = true
+                }, completion: { (comoplete:Bool) in
+                    self.startImageView?.hidden = false
+
+                    zoomOutImageView.removeFromSuperview()
+            })
+            
+
+      
+        }
+    }
     
     
 }

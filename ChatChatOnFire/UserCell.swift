@@ -60,9 +60,7 @@ class UserCell:UITableViewCell {
             }
             
             //convert timeStamp to formated time
-            
-            
-            print(snapshot)
+ 
             
             }, withCancelBlock: nil)
         
