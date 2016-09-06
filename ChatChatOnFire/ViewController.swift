@@ -39,55 +39,37 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         
          let userID = snapshot.key
   
-            
-            
             FIRDatabase.database().reference().child("user-messages").child(uid).child(userID).observeEventType(.ChildAdded, withBlock: { (snapshot) in
-              
-                
+      
                 let messageId = snapshot.key
  
-              
-                
                 let messagesReference = FIRDatabase.database().reference().child("messages").child(messageId)
                 messagesReference.observeSingleEventOfType(.Value, withBlock: { (snapshot:FIRDataSnapshot) in
-                    
-                    
-                    
-                    
-                    if let dicionary = snapshot.value as? [String: AnyObject]{
-                        
-                        let message = Message(dictionary: dicionary)
-                        
-                        
-                      
-                        
-                        //                self.messages.append(message)
-                        
-                        if let chatPartnerID = message.chatPartnerId() {
-                            //passing the vaule align to the same key accordingly into dictionary
-                            
-                            self.messagesDictionary[chatPartnerID] = message
+                if let dicionary = snapshot.value as? [String: AnyObject]{
+                let message = Message(dictionary: dicionary)
+                //                self.messages.append(message)
+                if let chatPartnerID = message.chatPartnerId() {
+                //passing the vaule align to the same key accordingly into dictionary
+                self.messagesDictionary[chatPartnerID] = message
 
-                            
+                 messagesReference.observeEventType(.ChildRemoved, withBlock: { (snapshot) in
+                    
+                    self.messagesDictionary.removeValueForKey(snapshot.key)
+                    self.handleReloadTable()
+                    
+                    }, withCancelBlock: nil)
                             
                         }
-                        
-            
+                    
                         self.timer?.invalidate()
                         self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
-                        
-                        
                         
                     } 
                     
                     }, withCancelBlock: nil)
-            
-                
+
                 }, withCancelBlock: nil)
-            
-    
-            
-            
+
             }, withCancelBlock: nil)
     }
     
@@ -373,16 +355,10 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         
     }
     
-    
-    
-    
-    
+ 
     
     //handle imagepicker end .....
-    
-    
-    
-    
+ 
     
     func showChatControllerForUser(user:User)  {
         
@@ -410,7 +386,42 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         print("loging out")
         
     }
-
+    
+    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        guard let uid = FIRAuth.auth()?.currentUser?.uid else {
+            return
+        }
+        
+        let message = messages[indexPath.row]
+        if let chatPartnerId = message.chatPartnerId(){
+            FIRDatabase.database().reference().child("user-messages").child(uid).child(chatPartnerId).removeValueWithCompletionBlock({ (error, reference) in
+                if error != nil {
+                    print(error)
+                    return
+                    
+                }
+                
+                self.messagesDictionary.removeValueForKey(message.chatPartnerId()!)
+                self.handleReloadTable()
+//                self.messages.removeAtIndex(indexPath.row)
+//                
+//                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                
+                
+                
+            })
+            
+        }
+       
+        
+        
+    }
 
 }
 

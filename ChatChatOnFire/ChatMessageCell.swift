@@ -7,10 +7,70 @@
 //
 
 import UIKit
-
+import AVFoundation
 class ChatMessageCell: UICollectionViewCell {
     
+    var message: Message?
     var chatLogController: ChatLogController?
+    var activityIndicatorView: UIActivityIndicatorView = {
+        
+        let indicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
+        
+       indicatorView.translatesAutoresizingMaskIntoConstraints = false
+        
+        indicatorView.hidesWhenStopped = true
+     
+        return indicatorView
+    }()
+    
+    
+    lazy var playButton:UIButton = {
+       let button = UIButton(type: .System)
+        button.setTitle("play", forState: .Normal)
+        let image = UIImage(named: "play")
+        button.setImage(image, forState: .Normal)
+        button.tintColor = UIColor.whiteColor()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(handlePlay), forControlEvents: .TouchUpInside)
+        return button
+    }()
+    
+    var playerLayer: AVPlayerLayer?
+    var player : AVPlayer?
+    
+    func handlePlay( )  {
+        
+        if let videoUrl = message?.videoUrl, url = NSURL(string: videoUrl){
+            player = AVPlayer(URL: url)
+             
+            playerLayer = AVPlayerLayer(player: player)
+            playerLayer?.frame = bubbleView.bounds
+            bubbleView.layer.addSublayer(playerLayer!)
+  
+            dispatch_async(dispatch_get_main_queue(), { 
+                self.player?.play()
+            })
+            
+            
+            //after starts to play the video
+//            messageImage.alpha = 0
+            playButton.hidden = true
+            activityIndicatorView.startAnimating()
+        }
+   
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        playerLayer?.removeFromSuperlayer()
+        player?.pause()
+        
+        activityIndicatorView.stopAnimating()
+        
+        
+        
+    }
+    
     
     let textView:UITextView = {
          let tV = UITextView()
@@ -68,7 +128,7 @@ class ChatMessageCell: UICollectionViewCell {
         let imageView = UIImageView()
      
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .ScaleAspectFill
+        imageView.contentMode = .ScaleAspectFit
         imageView.layer.cornerRadius = 16
         imageView.layer.masksToBounds = true
         imageView.userInteractionEnabled = true
@@ -94,7 +154,23 @@ class ChatMessageCell: UICollectionViewCell {
         addSubview(profileImageView)
         addSubview(profileImageViewB)
         
+        
         bubbleView.addSubview(messageImage)
+        
+        messageImage.addSubview(playButton)
+        
+        //add iso 9 constraint to View X Y width height
+        playButton.centerXAnchor.constraintEqualToAnchor(messageImage.centerXAnchor).active = true
+        playButton.centerYAnchor.constraintEqualToAnchor(messageImage.centerYAnchor).active = true
+        playButton.widthAnchor.constraintEqualToConstant(50).active = true
+        playButton.heightAnchor.constraintEqualToConstant(50).active = true
+        
+        //add iso 9 constraint to View X Y width height
+        playButton.addSubview(activityIndicatorView)
+        activityIndicatorView.centerXAnchor.constraintEqualToAnchor(messageImage.centerXAnchor).active = true
+        activityIndicatorView.centerYAnchor.constraintEqualToAnchor(messageImage.centerYAnchor).active = true
+        activityIndicatorView.widthAnchor.constraintEqualToConstant(50).active = true
+        activityIndicatorView .heightAnchor.constraintEqualToConstant(50).active = true
         
         //add iso 9 constraint to View X Y width height
         messageImage.topAnchor.constraintEqualToAnchor(bubbleView.topAnchor).active = true
