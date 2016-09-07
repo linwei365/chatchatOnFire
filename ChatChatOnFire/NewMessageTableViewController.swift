@@ -15,9 +15,11 @@ class NewMessageTableViewController: UITableViewController {
     let cellID = "Cell"
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        
         tableView.registerClass(UserCell.self, forCellReuseIdentifier: cellID)
         
+        self.navigationItem.title = "Other Users"
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: #selector(handleCancelButtonAction))
         
         
@@ -31,18 +33,29 @@ class NewMessageTableViewController: UITableViewController {
         FIRDatabase.database().reference().child("users").observeEventType(FIRDataEventType.ChildAdded , withBlock: { (snapshot:FIRDataSnapshot) in
             
             if let dicitonary = snapshot.value as? [String: AnyObject] {
+
                 
+                
+               
                 let user:User = User()
                 user.id = snapshot.key
                 
-                //this will crash if the firebase key doesn't match to the string key set up in the model
-                user.setValuesForKeysWithDictionary(dicitonary)
-                //safer way
-//                user.name = dicitonary["name"] as! String
-//                user.email = dicitonary["email"] as! String
+                
+                let currentUserId = FIRAuth.auth()?.currentUser?.uid
+                if currentUserId != user.id {
+                    
+                    //this will crash if the firebase key doesn't match to the string key set up in the model
+                    user.setValuesForKeysWithDictionary(dicitonary)
+                    //safer way
+                    //                user.name = dicitonary["name"] as! String
+                    //                user.email = dicitonary["email"] as! String
+                    
+                    
+                    self.users.append(user)
+                }
                 
                 
-                self.users.append(user)
+
                 
                 dispatch_async(dispatch_get_main_queue(), { 
                     self.tableView.reloadData()
@@ -88,21 +101,31 @@ class NewMessageTableViewController: UITableViewController {
         
         let user = users[indexPath.row]
         
-        cell.textLabel?.text = user.name
-        cell.detailTextLabel?.text = user.email
+
+            
  
+            
+            cell.textLabel?.text = user.name
+            cell.detailTextLabel?.text = user.email
+            
+            if let profileImageUrl = user.profileImageUrl {
+                
+                
+                cell.profileImageView.loadImageUsingCacheWithUrlString(profileImageUrl)
+                
+            } else{
+                
+                //fix image changing if url string is nil
+                cell.profileImageView.image = UIImage(named: "profile_teaser")
+            }
+     
+            
+            
+   
         
-        
-        if let profileImageUrl = user.profileImageUrl {
-            
-           
-            cell.profileImageView.loadImageUsingCacheWithUrlString(profileImageUrl)
-            
-        } else{
-            
-            //fix image changing if url string is nil
-            cell.profileImageView.image = UIImage(named: "profile_teaser")
-        }
+
+ 
+
         
 
         return cell
@@ -114,7 +137,12 @@ class NewMessageTableViewController: UITableViewController {
         
         dismissViewControllerAnimated(true) {
             
+            
+            
+            
             let user = self.users[indexPath.row]
+            
+            
              //pass user
             self.messageController?.showChatControllerForUser(user)
             

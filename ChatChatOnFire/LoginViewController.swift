@@ -12,14 +12,15 @@ import Firebase
 protocol LoginViewControllerDelegate {
     func userLoginSignUpDataDidChange()
 }
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UITextFieldDelegate {
 
     var delegate:LoginViewControllerDelegate? = nil
     
-    let loginScrollView:UIScrollView = {
+   lazy var loginScrollView:UIScrollView = {
        let scrollView = UIScrollView()
         scrollView.contentSize.height = 1000
         scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapGesture)))
         return scrollView
     }()
     
@@ -90,6 +91,16 @@ class LoginViewController: UIViewController {
     
     }
     
+    // dissmis keyboard
+//    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+//       
+//    }
+    
+    func handleTapGesture()  {
+        emailTextField.resignFirstResponder()
+        nameTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
+    }
     
     
     //toggle sign up or log in call
@@ -128,9 +139,10 @@ class LoginViewController: UIViewController {
     }
     
        //create name textfield
-    let nameTextField:UITextField = {
+    lazy var nameTextField:UITextField = {
         let textField = UITextField()
         textField.placeholder = "Name"
+        textField.delegate = self
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -145,9 +157,10 @@ class LoginViewController: UIViewController {
     
     
     //create email textfield
-    let emailTextField:UITextField = {
+    lazy var emailTextField:UITextField = {
         let textField = UITextField()
         textField.placeholder = "Email"
+        textField.delegate = self
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -161,9 +174,10 @@ class LoginViewController: UIViewController {
     }()
     
     //create password textfield
-    let passwordTextField:UITextField = {
+    lazy var passwordTextField:UITextField = {
         let textField = UITextField()
         textField.placeholder = "Password"
+         textField.delegate = self
         textField.secureTextEntry = true
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField

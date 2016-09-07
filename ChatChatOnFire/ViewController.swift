@@ -230,7 +230,16 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         
         //create an UIView
         let titleView = UIView()
-        titleView.frame = CGRectMake(0, 0, 100, 40)
+         titleView.frame = CGRectMake(0, 0, 100, 40)
+        
+         //set UIView to navi title view
+        self.navigationItem.titleView = titleView
+        titleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleProfileImageView)))
+        titleView.userInteractionEnabled = true
+   
+ 
+        
+        
          //create an UIView to contain image and label
         let containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
@@ -276,10 +285,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         nameLabel.rightAnchor.constraintEqualToAnchor(containerView.rightAnchor).active = true
         nameLabel.heightAnchor.constraintEqualToAnchor(profileImageView.heightAnchor).active = true
         
-        //set UIView to navi title view
-        self.navigationItem.titleView = titleView
-       titleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleProfileImageView)))
-        titleView.userInteractionEnabled = true
+  
         
     }
     
@@ -321,21 +327,51 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
             
         }
         
-        if let image = selectedImage {
+        if let image = selectedImage, uploadData = UIImageJPEGRepresentation(image, 0.1) {
             
             let uid = FIRAuth.auth()?.currentUser?.uid
             
-             FIRDatabase.database().reference().child("users").child(uid!).observeEventType(.ChildAdded, withBlock: { (snapshot) in
+            FIRDatabase.database().reference().child("users").child(uid!).observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+             
                 
-                let user = snapshot.key
+                if  let userDictionary = snapshot.value as? [String:AnyObject] {
+                    
+                    let user = User()
+                    user.setValuesForKeysWithDictionary(userDictionary)
+                    
+                    print()
+                    
+                    if let imageUID = user.imageUID {
+                        
+                        let storageRef = FIRStorage.storage().reference().child("Profile_Images").child("\(imageUID).jpg")
+                        
+                        storageRef.putData(uploadData, metadata: nil, completion: { (metadata:FIRStorageMetadata?, error) in
+                            if error != nil {
+                                print(error)
+                                return
+                            }
+                            
+                            print(metadata?.downloadURL()?.absoluteString)
+                            if let userProfileImageUrl = metadata?.downloadURL()?.absoluteString {
+                                
+                                let values = ["profileImageUrl": userProfileImageUrl]
+                                self.registerUserToFireDatabaseWithParameters(uid!, values: values)
+                                
+                                
+                                
+                            }
+                            
+                        })
+                    }
+                    
+                    
+                }
                 
-                print(user)
+
                 
-//                         let storageRef = FIRStorage.storage().reference().child("Profile_Images").child("\(user?.imageUID).jpg")
-                return
-                
-                }, withCancelBlock: nil)
+            })
             
+ 
 
             
             //output needs to save out the image
@@ -345,6 +381,41 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         
         
     }
+    
+    
+    
+    //refractoring handling register User to database
+    
+    private  func registerUserToFireDatabaseWithParameters(uid:String, values: [String: AnyObject] )   {
+        //firebase datebase refrence url
+        let ref = FIRDatabase.database().referenceFromURL("https://chatchatonfire.firebaseio.com/")
+        
+        //add child branch to users branch and to ref branch
+        let userRef =  ref.child("users").child(uid)
+        
+        //save vaules is a dictionary
+        userRef.updateChildValues(values, withCompletionBlock: { (error:NSError?, reference:FIRDatabaseReference) in
+            
+            if error != nil {
+                
+                print(error)
+                return
+                
+            }
+            
+            //saved succesfully
+            print("sign up created succesfully")
+            //dismiss View
+//            self.dismissViewControllerAnimated(true, completion: nil)
+            
+        })
+    }
+
+    
+    
+    
+    
+    
     
     
     //handle save image
