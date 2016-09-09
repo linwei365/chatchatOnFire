@@ -133,22 +133,22 @@ class AddContactsTableViewController: UITableViewController {
         return cell
     }
     
-    var messageController:ViewController?
+//    var messageController:ViewController?
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        dismissViewControllerAnimated(true) {
-            
-            
-            
-            
-            let user = self.users[indexPath.row]
-            
-            
-            //pass user
-            self.messageController?.showChatControllerForUser(user)
-            
-        }
+//        
+//        dismissViewControllerAnimated(true) {
+//            
+//            
+//            
+//            
+//            let user = self.users[indexPath.row]
+//            
+//            
+//            //pass user
+//            self.messageController?.showChatControllerForUser(user)
+//            
+//        }
         
     }
     
