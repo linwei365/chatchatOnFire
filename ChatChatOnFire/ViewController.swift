@@ -231,7 +231,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         //create an UIView
         let titleView = UIView()
          titleView.frame = CGRectMake(0, 0, 100, 40)
-        
+    
          //set UIView to navi title view
         self.navigationItem.titleView = titleView
         titleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleProfileImageView)))

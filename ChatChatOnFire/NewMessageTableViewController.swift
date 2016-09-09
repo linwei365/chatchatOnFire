@@ -17,17 +17,19 @@ class NewMessageTableViewController: UITableViewController {
         super.viewDidLoad()
         
         
-        tableView.registerClass(UserCell.self, forCellReuseIdentifier: cellID)
+        tableView.registerClass(FriendListTableViewCell.self, forCellReuseIdentifier: cellID)
         
-        self.navigationItem.title = "Other Users"
+        self.navigationItem.title = "Contacts"
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: #selector(handleCancelButtonAction))
         
-        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add Friend", style: .Plain, target: self, action: #selector(handleAddContactButtonAction))
         
         fetchUsers()
         
         
     }
+    
+    
 
     func fetchUsers( )  {
         FIRDatabase.database().reference().child("users").observeEventType(FIRDataEventType.ChildAdded , withBlock: { (snapshot:FIRDataSnapshot) in
@@ -68,7 +70,17 @@ class NewMessageTableViewController: UITableViewController {
         
     }
     
-  
+    func handleAddContactButtonAction( ) {
+        let newMessageVC:AddContactsTableViewController = AddContactsTableViewController()
+        //like a delegate?
+        
+        
+        newMessageVC.addContactController = self
+        
+        let navigationController = UINavigationController(rootViewController: newMessageVC)
+        presentViewController(navigationController, animated: true , completion: nil)
+        
+    }
     
     func handleCancelButtonAction()  {
         
@@ -94,7 +106,7 @@ class NewMessageTableViewController: UITableViewController {
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellID , forIndexPath: indexPath) as! UserCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellID , forIndexPath: indexPath) as! FriendListTableViewCell
 
 //        let  cell = UITableViewCell(style: .Subtitle, reuseIdentifier: cellID)
         
