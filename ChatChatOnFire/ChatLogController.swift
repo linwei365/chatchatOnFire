@@ -77,9 +77,9 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
             }, withCancelBlock: nil)
     }
     
+    var isFriend:Bool?
     
-    var frineds = [Friend]()
-    func observerIsFriend(FromID: String, toID:String ) -> Bool  {
+     func observerIsFriend(FromID: String, toID:String ){
         
            let currentUserFriend = Friend()
             let toFriend = Friend()
@@ -91,29 +91,39 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
                 
                 currentUserFriend.isFriend = snapshot.value as? Bool
                 
+         
+                let fromRef = FIRDatabase.database().reference().child("users").child(toID).child("friends").child(FromID)
                 
-                print("hhh \(currentUserFriend.isFriend)")
+                fromRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
+                    
+                    toFriend.isFriend = snapshot.value as? Bool
+                    print("hhh \(currentUserFriend.isFriend)")
+                    print("hhb \(toFriend.isFriend)")
+                    
+                    
+                    
+                    if currentUserFriend.isFriend == true && toFriend.isFriend == true {
+                        
+                        self.isFriend = true
+                        print("we are friend")
+                        
+                       
+                    }
+                    else {
+                        
+                        self.isFriend = false
+                        print("we are not friend")
+                    }
+                    
+                    
+                    }, withCancelBlock: nil)
+                
                 
                 }, withCancelBlock: nil)
         
-         let fromRef = FIRDatabase.database().reference().child("users").child(toID).child("friends").child(FromID)
-        
-        fromRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
-            
-            toFriend.isFriend = snapshot.value as? Bool
-            
-            
-            print("hhh \(currentUserFriend.isFriend)")
-            
-            }, withCancelBlock: nil)
-        
-        if currentUserFriend.isFriend == true && toFriend.isFriend == true {
-            
-            return true
-        }
         
         
-        return false
+ 
         
     }
     
@@ -303,6 +313,11 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
                 self.uploadImageToFirebaseStorage(thumbnailImage, completion: { (imageUrl) in
                     
                     let properties: [String: AnyObject] = ["imageUrl": imageUrl, "imageWidth": thumbnailImage.size.width, "imageHeight": thumbnailImage.size.height,"videoUrl":videoUrl]
+                    
+                    if self.isFriend == false {
+                        
+                        return
+                    }
                     self.sendMessageWithProperties(properties)
                
                 })
@@ -474,14 +489,82 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         
         let currentID = FIRAuth.auth()?.currentUser?.uid
         
-     
-  
-        if (message.fromID != currentID ) {
+        
+        
+        print("currentID is \(message.toID) \(message.fromID!)")
+        
+        //if not friend
+        if self.isFriend == false {
             
-            print(message.chatPartnerId())
+            
+            if (message.fromID != currentID ) {
+                
+                print(message.chatPartnerId())
+                cell.message = message
+                cell.textView.text = message.text
+                
+                
+                
+                
+                cell.bubbleView.backgroundColor = UIColor.clearColor()
+                if let messageImageUrl =  message.imageUrl {
+                    cell.messageImage.loadImageUsingCacheWithUrlString(messageImageUrl)
+                    cell.messageImage.hidden = false
+                    
+                    
+                }
+                else {
+                    cell.messageImage.hidden = true
+                    //            cell.bubbleView.backgroundColor = ChatMessageCell.blueBubbleColor
+                }
+                
+                
+                
+                if let text = message.text {
+                    
+                    cell.bubbleViewConstraintWith?.constant = estimateFrameForText(text).width + 32
+                    cell.textView.hidden = false
+                    
+                } else if (message.imageUrl != nil) {
+                    cell.textView.hidden = true
+                    cell.bubbleViewConstraintWith?.constant = 200
+                }
+                
+                
+                
+                
+                
+                if let profileImageUrl = user!.profileImageUrl {
+                    cell.profileImageView.loadImageUsingCacheWithUrlString(profileImageUrl)
+                } else {
+                    cell.profileImageView.image = UIImage(named: "profile_teaser")
+                }
+                
+                
+                setupNameAndProfileImageB(cell.profileImageViewB)
+                
+                
+                setupCell(cell, message: message)
+                
+                if message.videoUrl != nil {
+                    cell.playButton.hidden = false
+                } else {
+                    cell.playButton.hidden = true
+                }
+            }
+            else {
+                
+                cell.profileImageView.hidden = true
+                cell.profileImageViewB.hidden = true
+            }
+        } else {
+            
+            
+           //if isFriend then do
+       
             cell.message = message
             cell.textView.text = message.text
-        
+            
             
             
             
@@ -530,22 +613,77 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
             } else {
                 cell.playButton.hidden = true
             }
-        }
-        else {
+
             
-            cell.profileImageView.hidden = true
-            cell.profileImageViewB.hidden = true
+            
         }
+     
+
         
         
         
+        ///-------
+        
+//        cell.message = message
+//        cell.textView.text = message.text
+//        
+//        
+//        
+//        
+//        cell.bubbleView.backgroundColor = UIColor.clearColor()
+//        if let messageImageUrl =  message.imageUrl {
+//            cell.messageImage.loadImageUsingCacheWithUrlString(messageImageUrl)
+//            cell.messageImage.hidden = false
+//            
+//            
+//        }
+//        else {
+//            cell.messageImage.hidden = true
+//            //            cell.bubbleView.backgroundColor = ChatMessageCell.blueBubbleColor
+//        }
+//        
+//        
+//        
+//        if let text = message.text {
+//            
+//            cell.bubbleViewConstraintWith?.constant = estimateFrameForText(text).width + 32
+//            cell.textView.hidden = false
+//            
+//        } else if (message.imageUrl != nil) {
+//            cell.textView.hidden = true
+//            cell.bubbleViewConstraintWith?.constant = 200
+//        }
+//        
+//        
+//        
+//        
+//        
+//        if let profileImageUrl = user!.profileImageUrl {
+//            cell.profileImageView.loadImageUsingCacheWithUrlString(profileImageUrl)
+//        } else {
+//            cell.profileImageView.image = UIImage(named: "profile_teaser")
+//        }
+//        
+//        
+//        setupNameAndProfileImageB(cell.profileImageViewB)
+//        
+//        
+//        setupCell(cell, message: message)
+//        
+//        if message.videoUrl != nil {
+//            cell.playButton.hidden = false
+//        } else {
+//            cell.playButton.hidden = true
+//        }
+//        
+//
         
 
         
          return cell
     }
     
-     
+    
     
     func setupNameAndProfileImageB(profileImageView: UIImageView)  {
         
@@ -652,6 +790,11 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
             return
         }
         
+        if isFriend == false {
+            
+            return
+        }
+        
          let properties = ["text":inputTextField.text!]
         sendMessageWithProperties(properties)
         
@@ -663,6 +806,11 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
     }
 
     private func uploadImageWithUrl(imageURL: String ,image:UIImage) {
+        
+        if isFriend == false {
+            
+            return
+        }
         
         let properties: [String: AnyObject] = ["imageUrl": imageURL, "imageWidth": image.size.width, "imageHeight": image.size.height]
         sendMessageWithProperties(properties)
@@ -679,8 +827,8 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         let toID = user!.id!
         let fromID = FIRAuth.auth()!.currentUser!.uid
         
-        if observerIsFriend(fromID, toID: toID) == true {
-            
+  
+        
         
         
         let timeStamp:NSNumber = Int(NSDate().timeIntervalSince1970)
@@ -710,7 +858,7 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
             
         }
         
-        }
+//        }
         
         //-----------------
  

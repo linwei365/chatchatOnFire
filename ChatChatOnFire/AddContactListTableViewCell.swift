@@ -21,13 +21,7 @@ class AddContactListTableViewCell:UITableViewCell {
             self.detailTextLabel?.text = message?.text
             setupNameAndProfileImage()
             
-//            if let seconds = self.message?.timeStamp?.doubleValue {
-//                
-//                let timeStampeDate = NSDate(timeIntervalSince1970: seconds)
-//                let dateFormator = NSDateFormatter()
-//                dateFormator.dateFormat = "hh:mm:ss a"
-////                self.timeLabel.text = dateFormator.stringFromDate(timeStampeDate)
-//            }
+ 
             
         }
     }
@@ -105,12 +99,15 @@ class AddContactListTableViewCell:UITableViewCell {
     func handleAddFriend( )  {
        if let  user = user {
         
-        self.addContactsController?.sendFriendRequest(user)
+        
+            self.addContactsController?.sendFriendRequest(user)
+ 
+        
         }
        
   
-        friendAddButton.hidden = true
-        undoFriend.hidden = false
+//        friendAddButton.enabled = false
+        
      }
     
     

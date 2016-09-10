@@ -136,50 +136,115 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         
         let currentID = FIRAuth.auth()?.currentUser?.uid
         
-        if messages.count > 0 {
+        
+        if isFriend == false {
             
-          
-            for message  in messages{
+            if messages.count > 0 {
                 
-                if (message.fromID != currentID ) {
+                
+                for message  in messages{
                     
-                    print(message.chatPartnerId()! + " k")
-                    return messages.count
+                    if (message.fromID != currentID ) {
+                        
+                        print(message.chatPartnerId()! + " k")
+                        return messages.count
+                    }
                 }
+                
+                
+            }
+                
+            else {
+                
+                
+                return 0
             }
 
-            
-        }
-        
-         else {
-            
-            return 0
         }
         
         
-       return 0
+        return messages.count
       
     }
     
     
-    var indexPathA : NSIndexPath?
+ 
     
+    
+    var isFriend:Bool?
+    
+    func observerIsFriend(FromID: String, toID:String ){
+        
+        let currentUserFriend = Friend()
+        let toFriend = Friend()
+        let currentUserRef = FIRDatabase.database().reference().child("users").child(FromID).child("friends").child(toID)
+        
+        currentUserRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
+            
+            
+            
+            currentUserFriend.isFriend = snapshot.value as? Bool
+            
+            
+            let fromRef = FIRDatabase.database().reference().child("users").child(toID).child("friends").child(FromID)
+            
+            fromRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
+                
+                toFriend.isFriend = snapshot.value as? Bool
+                print("hhh \(currentUserFriend.isFriend)")
+                print("hhb \(toFriend.isFriend)")
+                
+                
+                
+                if currentUserFriend.isFriend == true && toFriend.isFriend == true {
+                    
+                    self.isFriend = true
+                    print("we are friend")
+                    
+                    
+                }
+                else {
+                    
+                    self.isFriend = false
+                    print("we are not friend")
+                }
+                
+                
+                }, withCancelBlock: nil)
+            
+            
+            }, withCancelBlock: nil)
+        
+        
+        
+        
+        
+    }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
          let cell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath) as! UserCell
-        
-        indexPathA = indexPath
-         print(indexPathA?.row)
+   
       
         let currentID = FIRAuth.auth()?.currentUser?.uid
         
         
         let message = messages[indexPath.row]
-        if (message.fromID != currentID ) {
+        
+        if isFriend == false {
            
-            print(message.chatPartnerId())
-                    cell.message = message
+            if (message.fromID != currentID ) {
+                
+                print(message.chatPartnerId())
+                cell.message = message
+            }
         }
+        else {
+               cell.message = message
+            
+        }
+        
+        
+//    cell.message = message
         
 
         

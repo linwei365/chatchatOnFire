@@ -25,13 +25,61 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ChatChatOnFire/AddContactListTableViewCell.swift"
-            timestampString = "495159605.265617"
+            filePath = "ChatChatOnFire/ChatLogController.swift"
+            timestampString = "495182060.957866"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "109"
-            endingLineNumber = "109"
-            landmarkName = "handleAddFriend()"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
+            landmarkName = "observerIsFriend(_:toID:)"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ChatChatOnFire.ChatLogController.observerIsFriend (Swift.String, toID : Swift.String) -&gt; Swift.Bool"
+                  moduleName = "ChatChatOnFire"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/linwei/Desktop/IOS%20Project/AugustProejct/ChatChatOnFire/ChatChatOnFire/ChatLogController.swift"
+                  timestampString = "495181113.646544"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "87"
+                  endingLineNumber = "87"
+                  offsetFromSymbolStart = "584">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ChatChatOnFire.ChatLogController.(observerIsFriend (Swift.String, toID : Swift.String) -&gt; Swift.Bool).(closure #1)"
+                  moduleName = "ChatChatOnFire"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/linwei/Desktop/IOS%20Project/AugustProejct/ChatChatOnFire/ChatChatOnFire/ChatLogController.swift"
+                  timestampString = "495181113.646805"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "91"
+                  endingLineNumber = "91"
+                  offsetFromSymbolStart = "28">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChatChatOnFire/FriendListTableViewCell.swift"
+            timestampString = "495189214.397672"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
+            landmarkName = "handleRemoveFriend()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

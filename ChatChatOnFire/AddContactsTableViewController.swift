@@ -21,7 +21,7 @@ class AddContactsTableViewController: UITableViewController {
         
         
         tableView.registerClass(AddContactListTableViewCell.self, forCellReuseIdentifier: cellID)
-        
+        tableView.allowsSelection = false
         self.navigationItem.title = "Add Contacts"
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: #selector(handleCancelButtonAction))
         
@@ -115,6 +115,9 @@ class AddContactsTableViewController: UITableViewController {
         cell.textLabel?.text = user.name
         cell.detailTextLabel?.text = user.email
         
+ 
+        
+       print( isFriend)
         
         
         if let profileImageUrl = user.profileImageUrl {
@@ -133,7 +136,63 @@ class AddContactsTableViewController: UITableViewController {
         return cell
     }
     
+    var isFriend:Bool?
+    
+    func observerIsFriend(FromID: String, toID:String ){
+        
+        let currentUserFriend = Friend()
+        let toFriend = Friend()
+        let currentUserRef = FIRDatabase.database().reference().child("users").child(FromID).child("friends").child(toID)
+        
+        currentUserRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
+            
+            
+            
+            currentUserFriend.isFriend = snapshot.value as? Bool
+            
+            
+            let fromRef = FIRDatabase.database().reference().child("users").child(toID).child("friends").child(FromID)
+            
+            fromRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
+                
+                toFriend.isFriend = snapshot.value as? Bool
+                print("hhh \(currentUserFriend.isFriend)")
+                print("hhb \(toFriend.isFriend)")
+                
+                
+                
+                if currentUserFriend.isFriend == true && toFriend.isFriend == true {
+                    
+                    self.isFriend = true
+                    print("we are friend")
+                    
+                    
+                }
+                else {
+                    
+                    self.isFriend = false
+                    print("we are not friend")
+                }
+                
+                
+                }, withCancelBlock: nil)
+            
+            
+            }, withCancelBlock: nil)
+        
+        
+        
+        
+        
+    }
+    
     func sendFriendRequest(user: User)   {
+        
+        
+      
+        
+      
+        
         if let uid = FIRAuth.auth()?.currentUser?.uid {
            
             if let incomingUserId = user.id {
@@ -151,6 +210,7 @@ class AddContactsTableViewController: UITableViewController {
                         return
                     }
                     
+                    self.dismissViewControllerAnimated(true, completion: nil)
                     
                     let properties = ["text":"you have a friend reqeust from \(self.currentUser.name)"]
 //                    self.chatLogController.sendMessageWithProperties(properties)
@@ -190,17 +250,10 @@ class AddContactsTableViewController: UITableViewController {
                         return
                     }
                     
-                    
-//                    let properties = ["text":"you have a friend reqeust from \(self.currentUser.name)"]
-//                    //                    self.chatLogController.sendMessageWithProperties(properties)
-//                    self.sendMessageWithProperties(properties, user: user)
-//                    
-//                    print(ref)
+ 
                     
                 })
-                //send a private request message toUser
-                
-                //            print("send request \(user.id)")
+ 
             }
             
             

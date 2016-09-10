@@ -12,6 +12,9 @@ import Firebase
 //Create a custome  cell Class
 class FriendListTableViewCell:UITableViewCell {
     
+    var newMessageController:NewMessageTableViewController?
+    
+     var user: User?
     var message:Message? {
         
         didSet{
@@ -20,13 +23,7 @@ class FriendListTableViewCell:UITableViewCell {
             self.detailTextLabel?.text = message?.text
             setupNameAndProfileImage()
             
-//            if let seconds = self.message?.timeStamp?.doubleValue {
-//                
-//                let timeStampeDate = NSDate(timeIntervalSince1970: seconds)
-//                let dateFormator = NSDateFormatter()
-//                dateFormator.dateFormat = "hh:mm:ss a"
-////                self.timeLabel.text = dateFormator.stringFromDate(timeStampeDate)
-//            }
+ 
             
         }
     }
@@ -75,8 +72,7 @@ class FriendListTableViewCell:UITableViewCell {
     
     
     
-    
-    
+  
     
     //custom imageView
     let profileImageView:UIImageView = {
@@ -97,16 +93,22 @@ class FriendListTableViewCell:UITableViewCell {
         button.setTitle("Remove Friend", forState: .Normal)
         
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(handleAddFriend), forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(handleRemoveFriend), forControlEvents: .TouchUpInside)
         return button
     }()
     
-    func handleAddFriend( )  {
+    func handleRemoveFriend( )  {
         
-        print("click")
-        friendAddButton.hidden = true
-        undoFriend.hidden = true
-        cancelFriendButton.hidden = false
+        if let  user = user {
+         
+            print(message?.chatPartnerId())
+            
+            self.newMessageController?.undoFriendRequest(user)
+            
+            
+        }
+        
+        
     }
     //create a cancelFriendButton
     lazy var cancelFriendButton:UIButton = {

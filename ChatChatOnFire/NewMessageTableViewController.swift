@@ -29,8 +29,44 @@ class NewMessageTableViewController: UITableViewController {
         
     }
     
+    func observerIsFriend(FromID: String, toID:String ) -> Bool  {
+        
+        let currentUserFriend = Friend()
+        let toFriend = Friend()
+        let currentUserRef = FIRDatabase.database().reference().child("users").child(FromID).child("friends").child(toID)
+        
+        currentUserRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
+            
+            
+            
+            currentUserFriend.isFriend = snapshot.value as? Bool
+            
+            
+            print("hhh \(currentUserFriend.isFriend)")
+            
+            }, withCancelBlock: nil)
+        
+        let fromRef = FIRDatabase.database().reference().child("users").child(toID).child("friends").child(FromID)
+        
+        fromRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
+            
+            toFriend.isFriend = snapshot.value as? Bool
+            
+            
+            print("fff \(currentUserFriend.isFriend)")
+            
+            }, withCancelBlock: nil)
+        
+        if currentUserFriend.isFriend == true && toFriend.isFriend == true {
+            
+            return true
+        }
+        
+        
+        return false
+        
+    }
     
-
     func fetchUsers( )  {
         FIRDatabase.database().reference().child("users").observeEventType(FIRDataEventType.ChildAdded , withBlock: { (snapshot:FIRDataSnapshot) in
             
@@ -113,8 +149,9 @@ class NewMessageTableViewController: UITableViewController {
         
         let user = users[indexPath.row]
         
-
-            
+        
+        cell.newMessageController = self
+        cell.user = user
  
             
             cell.textLabel?.text = user.name
@@ -142,6 +179,82 @@ class NewMessageTableViewController: UITableViewController {
 
         return cell
     }
+    
+    
+    
+    
+    
+    func undoFriendRequest(user: User)   {
+        if let uid = FIRAuth.auth()?.currentUser?.uid {
+            
+            if let incomingUserId = user.id {
+                
+                let ref = FIRDatabase.database().reference().child("users").child(uid).child("friends").child(incomingUserId)
+                
+                //set user's friends list isFriend to true
+                let value = ["isFriend":false]
+                
+                
+                
+                
+                ref.setValue(value, andPriority: nil, withCompletionBlock: { (error, ref) in
+                    
+                    if error != nil {
+                        print(error)
+                        return
+                    }
+                    
+                    
+                    
+                })
+                
+            }
+            
+            
+        }
+        
+        
+    }
+    
+    
+    
+    
+    func sendMessageWithProperties(properties: [String: AnyObject] , user: User) {
+        
+        let ref = FIRDatabase.database().reference().child("messages")
+        let childRef = ref.childByAutoId()
+        let toID = user.id!
+        let fromID = FIRAuth.auth()!.currentUser!.uid
+        let timeStamp:NSNumber = Int(NSDate().timeIntervalSince1970)
+        var values: [String: AnyObject] = ["toID": toID, "fromID": fromID, "timeStamp":timeStamp]
+        
+        //        childRef.updateChildValues(vaules)
+        
+        //append properties dictionary onto values somehow??
+        //key $0, value $1
+        properties.forEach({values[$0] = $1})
+        
+        childRef.updateChildValues(values) { (error, ref) in
+            if error != nil {
+                print(error)
+                return
+            }
+            //create a ref
+            let userMessageRef = FIRDatabase.database().reference().child("user-messages").child(fromID).child(toID)
+            let messageId = childRef.key
+            //update a dictiontary at this refefence path
+            userMessageRef.updateChildValues([messageId : 1])
+            
+            let recipientUserRef = FIRDatabase.database().reference().child("user-messages").child(toID).child(fromID)
+            recipientUserRef.updateChildValues([messageId : 1])
+            
+        }
+        
+        
+    }
+    
+    
+    
     
     var messageController:ViewController?
     
