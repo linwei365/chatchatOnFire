@@ -11,7 +11,8 @@ import Firebase
 
 //Create a custome  cell Class
 class AddContactListTableViewCell:UITableViewCell {
-    
+    var addContactsController: AddContactsTableViewController?
+    var user: User?
     var message:Message? {
         
         didSet{
@@ -102,40 +103,25 @@ class AddContactListTableViewCell:UITableViewCell {
     }()
     
     func handleAddFriend( )  {
+       if let  user = user {
         
-        print("Pending")
-        friendAddButton.hidden = true
-        undoFriend.hidden = true
-        cancelFriendButton.hidden = false
-    }
-    //create a cancelFriendButton
-    lazy var cancelFriendButton:UIButton = {
-        
-        let button = UIButton(type: UIButtonType.System)
-        //        label.text = "HH:MM:SS"
-        
-        button.setTitle("Undo Request", forState: .Normal)
-        button.hidden = true
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(handleCancelFriend), forControlEvents: .TouchUpInside)
-        return button
-    }()
-    
-    func handleCancelFriend( )  {
-        
+        self.addContactsController?.sendFriendRequest(user)
+        }
+       
+  
         friendAddButton.hidden = true
         undoFriend.hidden = false
-        cancelFriendButton.hidden = true
-        
-        
-    }
-    //create a friendButton
+     }
+    
+    
+    
+ 
     lazy var undoFriend:UIButton = {
         
         let button = UIButton(type: UIButtonType.System)
         //        label.text = "HH:MM:SS"
         
-        button.setTitle("Friend", forState: .Normal)
+        button.setTitle("undo", forState: .Normal)
         button.hidden = true
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(handleUndoFriend), forControlEvents: .TouchUpInside)
@@ -143,10 +129,14 @@ class AddContactListTableViewCell:UITableViewCell {
     }()
     
     func handleUndoFriend( )  {
+        if let  user = user {
+            
+            self.addContactsController?.undoFriendRequest(user)
+        }
+        
         
         friendAddButton.hidden = false
         undoFriend.hidden = true
-        cancelFriendButton.hidden = true
         
         
     }
@@ -158,7 +148,7 @@ class AddContactListTableViewCell:UITableViewCell {
         
         addSubview(friendAddButton)
         addSubview(undoFriend)
-        addSubview(cancelFriendButton)
+       
         
         addSubview(profileImageView)
         //add iso 9 constraint to View X Y width height
@@ -179,12 +169,7 @@ class AddContactListTableViewCell:UITableViewCell {
         undoFriend.widthAnchor.constraintEqualToConstant(100).active = true
         undoFriend.heightAnchor.constraintEqualToAnchor(textLabel?.heightAnchor).active = true
         
-        //add iso 9 constraint to View X Y width height
-        cancelFriendButton.topAnchor.constraintEqualToAnchor(self.topAnchor, constant: 18).active = true
-        cancelFriendButton.rightAnchor.constraintEqualToAnchor(self.rightAnchor).active = true
-        cancelFriendButton.widthAnchor.constraintEqualToConstant(100).active = true
-        cancelFriendButton.heightAnchor.constraintEqualToAnchor(textLabel?.heightAnchor).active = true
-        
+ 
         
     }
     

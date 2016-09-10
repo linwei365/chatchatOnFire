@@ -39,8 +39,12 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
             return
         }
         
+        observerIsFriend(uid, toID: toID)
+        
          let userMessagesRef = FIRDatabase.database().reference().child("user-messages").child(uid).child(toID )
         userMessagesRef.observeEventType(.ChildAdded, withBlock: { (snapshot) in
+            
+            
             
             let messageId = snapshot.key
             let messagesRef = FIRDatabase.database().reference().child("messages").child(messageId)
@@ -72,6 +76,50 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
            
             }, withCancelBlock: nil)
     }
+    
+    
+    var frineds = [Friend]()
+    func observerIsFriend(FromID: String, toID:String ) -> Bool  {
+        
+           let currentUserFriend = Friend()
+            let toFriend = Friend()
+        let currentUserRef = FIRDatabase.database().reference().child("users").child(FromID).child("friends").child(toID)
+        
+            currentUserRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
+                
+             
+                
+                currentUserFriend.isFriend = snapshot.value as? Bool
+                
+                
+                print("hhh \(currentUserFriend.isFriend)")
+                
+                }, withCancelBlock: nil)
+        
+         let fromRef = FIRDatabase.database().reference().child("users").child(toID).child("friends").child(FromID)
+        
+        fromRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
+            
+            toFriend.isFriend = snapshot.value as? Bool
+            
+            
+            print("hhh \(currentUserFriend.isFriend)")
+            
+            }, withCancelBlock: nil)
+        
+        if currentUserFriend.isFriend == true && toFriend.isFriend == true {
+            
+            return true
+        }
+        
+        
+        return false
+        
+    }
+    
+    
+    
+    
     
     func scrollToLastIndext()  {
         if messages.count > 0 {
@@ -409,6 +457,9 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
     }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        
+        
         return messages.count
     }
     
@@ -419,53 +470,77 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         
         let message = messages[indexPath.item]
         
-        cell.message = message
-        cell.textView.text = message.text
-         cell.bubbleView.backgroundColor = UIColor.clearColor()
-        if let messageImageUrl =  message.imageUrl {
-            cell.messageImage.loadImageUsingCacheWithUrlString(messageImageUrl)
-        cell.messageImage.hidden = false
-       
+//        cell.message = message
+        
+        let currentID = FIRAuth.auth()?.currentUser?.uid
+        
+     
+  
+        if (message.fromID != currentID ) {
             
+            print(message.chatPartnerId())
+            cell.message = message
+            cell.textView.text = message.text
+        
+            
+            
+            
+            cell.bubbleView.backgroundColor = UIColor.clearColor()
+            if let messageImageUrl =  message.imageUrl {
+                cell.messageImage.loadImageUsingCacheWithUrlString(messageImageUrl)
+                cell.messageImage.hidden = false
+                
+                
+            }
+            else {
+                cell.messageImage.hidden = true
+                //            cell.bubbleView.backgroundColor = ChatMessageCell.blueBubbleColor
+            }
+            
+            
+            
+            if let text = message.text {
+                
+                cell.bubbleViewConstraintWith?.constant = estimateFrameForText(text).width + 32
+                cell.textView.hidden = false
+                
+            } else if (message.imageUrl != nil) {
+                cell.textView.hidden = true
+                cell.bubbleViewConstraintWith?.constant = 200
+            }
+            
+            
+            
+            
+            
+            if let profileImageUrl = user!.profileImageUrl {
+                cell.profileImageView.loadImageUsingCacheWithUrlString(profileImageUrl)
+            } else {
+                cell.profileImageView.image = UIImage(named: "profile_teaser")
+            }
+            
+            
+            setupNameAndProfileImageB(cell.profileImageViewB)
+            
+            
+            setupCell(cell, message: message)
+            
+            if message.videoUrl != nil {
+                cell.playButton.hidden = false
+            } else {
+                cell.playButton.hidden = true
+            }
         }
         else {
-             cell.messageImage.hidden = true
-//            cell.bubbleView.backgroundColor = ChatMessageCell.blueBubbleColor
-          }
-        
-        
-        
-        if let text = message.text {
             
-             cell.bubbleViewConstraintWith?.constant = estimateFrameForText(text).width + 32
-            cell.textView.hidden = false
-            
-        } else if (message.imageUrl != nil) {
-             cell.textView.hidden = true
-                cell.bubbleViewConstraintWith?.constant = 200
+            cell.profileImageView.hidden = true
+            cell.profileImageViewB.hidden = true
         }
         
-       
         
         
- 
-        if let profileImageUrl = user!.profileImageUrl {
-            cell.profileImageView.loadImageUsingCacheWithUrlString(profileImageUrl)
-        } else {
-           cell.profileImageView.image = UIImage(named: "profile_teaser")
-        }
+        
 
-        
-        setupNameAndProfileImageB(cell.profileImageViewB)
-        
-        
-        setupCell(cell, message: message)
-       
-        if message.videoUrl != nil {
-            cell.playButton.hidden = false
-        } else {
-            cell.playButton.hidden = true
-        }
         
          return cell
     }
@@ -595,14 +670,19 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
         
     }
 
-    //refract send
+    //refract send message
 
-    private func sendMessageWithProperties(properties: [String: AnyObject]) {
+     func sendMessageWithProperties(properties: [String: AnyObject]) {
         
         let ref = FIRDatabase.database().reference().child("messages")
         let childRef = ref.childByAutoId()
         let toID = user!.id!
         let fromID = FIRAuth.auth()!.currentUser!.uid
+        
+        if observerIsFriend(fromID, toID: toID) == true {
+            
+        
+        
         let timeStamp:NSNumber = Int(NSDate().timeIntervalSince1970)
          var values: [String: AnyObject] = ["toID": toID, "fromID": fromID, "timeStamp":timeStamp]
         
@@ -630,7 +710,7 @@ class ChatLogController: UICollectionViewController,UITextFieldDelegate,UICollec
             
         }
         
- 
+        }
         
         //-----------------
  

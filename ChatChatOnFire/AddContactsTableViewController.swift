@@ -12,9 +12,10 @@ import Firebase
 class AddContactsTableViewController: UITableViewController {
     
     var addContactController:NewMessageTableViewController?
-    
+    let chatLogController = ChatLogController()
     var users = [User]()
     let cellID = "Cell"
+    let currentUser = User ()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,6 +45,8 @@ class AddContactsTableViewController: UITableViewController {
                 
                 
                 let currentUserId = FIRAuth.auth()?.currentUser?.uid
+                
+                
                 if currentUserId != user.id {
                     
                     //this will crash if the firebase key doesn't match to the string key set up in the model
@@ -54,9 +57,11 @@ class AddContactsTableViewController: UITableViewController {
                     
                     
                     self.users.append(user)
+                } else {
+                    
+                    self.currentUser.setValuesForKeysWithDictionary(dicitonary)
                 }
-                
-                
+               
                 
                 
                 dispatch_async(dispatch_get_main_queue(), {
@@ -104,11 +109,13 @@ class AddContactsTableViewController: UITableViewController {
         let user = users[indexPath.row]
         
         
-        
-        
+        cell.user = user
+        cell.addContactsController = self
         
         cell.textLabel?.text = user.name
         cell.detailTextLabel?.text = user.email
+        
+        
         
         if let profileImageUrl = user.profileImageUrl {
             
@@ -121,18 +128,123 @@ class AddContactsTableViewController: UITableViewController {
             cell.profileImageView.image = UIImage(named: "profile_teaser")
         }
         
-        
-        
-        
-        
-        
-        
-        
-        
+ 
         
         return cell
     }
     
+    func sendFriendRequest(user: User)   {
+        if let uid = FIRAuth.auth()?.currentUser?.uid {
+           
+            if let incomingUserId = user.id {
+              
+                let ref = FIRDatabase.database().reference().child("users").child(uid).child("friends").child(incomingUserId)
+                
+                //set user's friends list isFriend to true
+               let value = ["isFriend":true]
+                ref.updateChildValues(value)
+                
+                ref.setValue(value, andPriority: nil, withCompletionBlock: { (error, ref) in
+                    
+                    if error != nil {
+                        print(error)
+                        return
+                    }
+                    
+                    
+                    let properties = ["text":"you have a friend reqeust from \(self.currentUser.name)"]
+//                    self.chatLogController.sendMessageWithProperties(properties)
+                     self.sendMessageWithProperties(properties, user: user)
+                    
+                    print(ref)
+                    
+                })
+                //send a private request message toUser
+              
+                //            print("send request \(user.id)")
+            }
+            
+
+        }
+ 
+        
+    }
+    
+    func undoFriendRequest(user: User)   {
+        if let uid = FIRAuth.auth()?.currentUser?.uid {
+            
+            if let incomingUserId = user.id {
+                
+                let ref = FIRDatabase.database().reference().child("users").child(uid).child("friends").child(incomingUserId)
+                
+                //set user's friends list isFriend to true
+                let value = ["isFriend":false]
+              
+                
+                 
+                
+                ref.setValue(value, andPriority: nil, withCompletionBlock: { (error, ref) in
+                    
+                    if error != nil {
+                        print(error)
+                        return
+                    }
+                    
+                    
+//                    let properties = ["text":"you have a friend reqeust from \(self.currentUser.name)"]
+//                    //                    self.chatLogController.sendMessageWithProperties(properties)
+//                    self.sendMessageWithProperties(properties, user: user)
+//                    
+//                    print(ref)
+                    
+                })
+                //send a private request message toUser
+                
+                //            print("send request \(user.id)")
+            }
+            
+            
+        }
+        
+        
+    }
+    
+    
+    
+    
+    func sendMessageWithProperties(properties: [String: AnyObject] , user: User) {
+        
+        let ref = FIRDatabase.database().reference().child("messages")
+        let childRef = ref.childByAutoId()
+        let toID = user.id!
+        let fromID = FIRAuth.auth()!.currentUser!.uid
+        let timeStamp:NSNumber = Int(NSDate().timeIntervalSince1970)
+        var values: [String: AnyObject] = ["toID": toID, "fromID": fromID, "timeStamp":timeStamp]
+        
+        //        childRef.updateChildValues(vaules)
+        
+        //append properties dictionary onto values somehow??
+        //key $0, value $1
+        properties.forEach({values[$0] = $1})
+        
+        childRef.updateChildValues(values) { (error, ref) in
+            if error != nil {
+                print(error)
+                return
+            }
+            //create a ref
+            let userMessageRef = FIRDatabase.database().reference().child("user-messages").child(fromID).child(toID)
+            let messageId = childRef.key
+            //update a dictiontary at this refefence path
+            userMessageRef.updateChildValues([messageId : 1])
+            
+            let recipientUserRef = FIRDatabase.database().reference().child("user-messages").child(toID).child(fromID)
+            recipientUserRef.updateChildValues([messageId : 1])
+ 
+        }
+ 
+        
+    }
 //    var messageController:ViewController?
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {

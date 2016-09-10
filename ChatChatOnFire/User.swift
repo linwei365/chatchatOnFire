@@ -14,5 +14,8 @@ class User: NSObject {
     var email: String?
     var profileImageUrl: String?
     var imageUID: String?
+    var friends = [String: AnyObject]()
+    
+//    var isFriend = false
     
 }

@@ -54,6 +54,8 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
 
                  messagesReference.observeEventType(.ChildRemoved, withBlock: { (snapshot) in
                     
+                  
+                    
                     self.messagesDictionary.removeValueForKey(snapshot.key)
                     self.handleReloadTable()
                     
@@ -129,16 +131,57 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return messages.count
+        
+ 
+        
+        let currentID = FIRAuth.auth()?.currentUser?.uid
+        
+        if messages.count > 0 {
+            
+          
+            for message  in messages{
+                
+                if (message.fromID != currentID ) {
+                    
+                    print(message.chatPartnerId()! + " k")
+                    return messages.count
+                }
+            }
+
+            
+        }
+        
+         else {
+            
+            return 0
+        }
+        
+        
+       return 0
+      
     }
+    
+    
+    var indexPathA : NSIndexPath?
+    
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath) as! UserCell
+         let cell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath) as! UserCell
+        
+        indexPathA = indexPath
+         print(indexPathA?.row)
+      
+        let currentID = FIRAuth.auth()?.currentUser?.uid
         
         
-//        let cell = UITableViewCell(style: .Subtitle, reuseIdentifier: "CellId")
         let message = messages[indexPath.row]
+        if (message.fromID != currentID ) {
+           
+            print(message.chatPartnerId())
+                    cell.message = message
+        }
         
-        cell.message = message
+
         
         
         
