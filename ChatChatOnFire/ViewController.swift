@@ -14,10 +14,31 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
     var messages = [Message]()
     var messagesDictionary =  [String: Message]()
     let cellID = "cellID"
+    let dataConstruction = DataReconstruction()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-         
+        //getting individual message
+        if let fromID =  FIRAuth.auth()?.currentUser?.uid{
+            //getting toID
+            let messageRef = FIRDatabase.database().reference().child("user-messages").child(fromID)
+            
+            messageRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snashot) in
+                
+                print("this is from data reconstruction\(snashot.key)")
+                
+                }, withCancelBlock: nil)
+            
+            
+        }
+        
+        
+        
+        
+        
+
+        
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .Plain, target: self, action: #selector(handleLogOut))
         
         let image = UIImage(named: "addNote")
