@@ -16,6 +16,9 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
     let cellID = "cellID"
     let dataConstruction = DataReconstruction()
     
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,6 +26,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         
         dataConstruction.getMessage()
         
+        print(dataConstruction.messageID)
         
         
         

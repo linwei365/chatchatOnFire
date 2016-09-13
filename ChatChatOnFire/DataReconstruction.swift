@@ -12,6 +12,7 @@ import Firebase
 
 class DataReconstruction: NSObject {
     
+    var messageID:String?
     
  
     
@@ -36,21 +37,8 @@ class DataReconstruction: NSObject {
                     //getting toID
                     let toID = snashot.key
                     
-                    
                     //get message ID
-                    
-                    let messageIDRef = FIRDatabase.database().reference().child("user-messages").child(fromID).child(toID)
-                    
-                    messageIDRef.observeEventType(.ChildAdded, withBlock: { (snapshotB) in
-                        
-                     //get message ID
-                        let messageID = snapshotB.key
-                        
-                        
-                        print("this is from data reconstruction \(messageID)")
-
-                        
-                        }, withCancelBlock: nil)
+                    self.getPrivateMessageWithFromIDToID(fromID, toID: toID)
                     
                     
                     
@@ -63,6 +51,23 @@ class DataReconstruction: NSObject {
     }
     
     
+    //get message ID
+    func getPrivateMessageWithFromIDToID(fromID:String, toID:String)   {
+
+        let messageIDRef = FIRDatabase.database().reference().child("user-messages").child(fromID).child(toID)
+        messageIDRef.observeEventType(.ChildAdded, withBlock: { (snapshotB) in
+            
+            //get message ID
+          self.messageID = snapshotB.key
+            
+            
+            print("this is from data reconstruction \(self.messageID)")
+
+            
+            }, withCancelBlock: nil)
+        
+        
+    }
     
     
 }
