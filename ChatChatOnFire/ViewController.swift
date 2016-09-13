@@ -160,10 +160,13 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
                 return 0
             }
 
+        } else {
+        
+            return messages.count
         }
         
         
-        return messages.count
+        return 0
       
     }
     
