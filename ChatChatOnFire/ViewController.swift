@@ -19,19 +19,9 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //getting individual message
-        if let fromID =  FIRAuth.auth()?.currentUser?.uid{
-            //getting toID
-            let messageRef = FIRDatabase.database().reference().child("user-messages").child(fromID)
-            
-            messageRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snashot) in
-                
-                print("this is from data reconstruction\(snashot.key)")
-                
-                }, withCancelBlock: nil)
-            
-            
-        }
+      
+        
+        dataConstruction.getMessage()
         
         
         
