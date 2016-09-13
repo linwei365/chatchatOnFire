@@ -15,18 +15,16 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
     var messagesDictionary =  [String: Message]()
     let cellID = "cellID"
     let dataConstruction = DataReconstruction()
-    
-    
+ 
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-      
-        
-        dataConstruction.getMessage()
-        
-        print(dataConstruction.messageID)
+//      
+          dataConstruction.getMessage()
+//        
+//        print(dataConstruction.messageID)
         
         
         

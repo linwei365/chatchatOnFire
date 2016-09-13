@@ -18,10 +18,8 @@ class DataReconstruction: NSObject {
     
     override init() {
             super.init()
-        
-      self.getMessage()
-        
-        
+           self.getMessage()
+ 
     }
     
 
@@ -37,10 +35,23 @@ class DataReconstruction: NSObject {
                     //getting toID
                     let toID = snashot.key
                     
-                    //get message ID
-                    self.getPrivateMessageWithFromIDToID(fromID, toID: toID)
+                    //get messageID
+                    self.getPrivateMessageIDWithFromIDAndToID(fromID, toID: toID, completion: { (messageID) in
+                        
+                        
+                        FIRDatabase.database().reference().child("messages").child(messageID).observeEventType(.ChildAdded, withBlock: { (snapshotC) in
+                            
+                            print(snapshotC.key)
+                            
+                            
+                            
+                            }, withCancelBlock: nil)
+
+                        
+                    })
                     
-                    
+ 
+ 
                     
                     }, withCancelBlock: nil)
             
@@ -52,18 +63,18 @@ class DataReconstruction: NSObject {
     
     
     //get message ID
-    func getPrivateMessageWithFromIDToID(fromID:String, toID:String)   {
+    func getPrivateMessageIDWithFromIDAndToID(fromID:String, toID:String, completion:(messageID: String)-> ())   {
 
         let messageIDRef = FIRDatabase.database().reference().child("user-messages").child(fromID).child(toID)
         messageIDRef.observeEventType(.ChildAdded, withBlock: { (snapshotB) in
             
             //get message ID
           self.messageID = snapshotB.key
-            
-            
+       
             print("this is from data reconstruction \(self.messageID)")
-
             
+            completion(messageID: self.messageID!)
+
             }, withCancelBlock: nil)
         
         
