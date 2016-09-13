@@ -166,7 +166,7 @@ class AddContactListTableViewCell:UITableViewCell {
         undoFriend.widthAnchor.constraintEqualToConstant(100).active = true
         undoFriend.heightAnchor.constraintEqualToAnchor(textLabel?.heightAnchor).active = true
         
- 
+        
         
     }
     

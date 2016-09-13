@@ -11,5 +11,5 @@ import UIKit
 class Friend: NSObject {
     
     var isFriend: Bool?
-    
+    var friendUUID:String?
 }
