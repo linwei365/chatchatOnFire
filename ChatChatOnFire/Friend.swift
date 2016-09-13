@@ -12,4 +12,7 @@ class Friend: NSObject {
     
     var isFriend: Bool?
     var friendUUID:String?
+    var test: String?
+    
+    
 }
