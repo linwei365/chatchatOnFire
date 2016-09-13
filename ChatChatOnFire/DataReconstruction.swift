@@ -41,13 +41,13 @@ class DataReconstruction: NSObject {
                     
                     let messageIDRef = FIRDatabase.database().reference().child("user-messages").child(fromID).child(toID)
                     
-                    messageIDRef.observeEventType(.ChildAdded, withBlock: { (snapshot) in
+                    messageIDRef.observeEventType(.ChildAdded, withBlock: { (snapshotB) in
                         
                      //get message ID
-                        let messageID = snashot.key
+                        let messageID = snapshotB.key
                         
                         
-                        print("this is from data reconstruction \(snashot.key)")
+                        print("this is from data reconstruction \(messageID)")
 
                         
                         }, withCancelBlock: nil)
