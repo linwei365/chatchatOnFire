@@ -18,12 +18,15 @@ class DataReconstruction: NSObject {
     
     override init() {
             super.init()
-           self.getMessage()
+        
+           self.getMessage { (dictionary) in
+            
+         }
+           self.getUser()
  
     }
-    
 
-    func getMessage()  {
+    func getMessage(completion:(dictionary:[String: AnyObject])->())  {
         //getting individual message
         if let fromID =  FIRAuth.auth()?.currentUser?.uid{
             
@@ -39,22 +42,21 @@ class DataReconstruction: NSObject {
                     self.getPrivateMessageIDWithFromIDAndToID(fromID, toID: toID, completion: { (messageID) in
                         
                         
-                        FIRDatabase.database().reference().child("messages").child(messageID).observeEventType(.ChildAdded, withBlock: { (snapshotC) in
+                       //get message
+                        FIRDatabase.database().reference().child("messages").child(messageID).observeEventType(.Value, withBlock: { (snapshotC) in
                             
-                            print(snapshotC.key)
-                            
-                            
-                            
-                            }, withCancelBlock: nil)
+                            if  let dictionary =  snapshotC.value as? [String: AnyObject]{
+                               
+                                
+                                completion(dictionary: dictionary)
+                                print(dictionary["text"])
+                            }
 
-                        
+                            }, withCancelBlock: nil)
+   
                     })
-                    
- 
- 
-                    
+
                     }, withCancelBlock: nil)
-            
             
         }
         
@@ -71,7 +73,6 @@ class DataReconstruction: NSObject {
             //get message ID
           self.messageID = snapshotB.key
        
-            print("this is from data reconstruction \(self.messageID)")
             
             completion(messageID: self.messageID!)
 
@@ -79,6 +80,29 @@ class DataReconstruction: NSObject {
         
         
     }
+    
+    
+    func getUser( )  {
+        //getting current user uuid
+        if let uuid =  FIRAuth.auth()?.currentUser?.uid {
+            
+        //getting userReference Observing from UUID
+        let userRefence = FIRDatabase.database().reference().child(uuid)
+         userRefence.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
+            
+            print(snapshot.key)
+            
+            
+            }, withCancelBlock: nil)
+            
+        }
+        
+        
+    
+    }
+    
+    
+    
     
     
 }

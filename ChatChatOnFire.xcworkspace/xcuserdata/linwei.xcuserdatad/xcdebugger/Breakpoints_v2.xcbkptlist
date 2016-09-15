@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChatChatOnFire/ViewController.swift"
-            timestampString = "495501034.206763"
+            timestampString = "495611465.23516"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "135"
-            endingLineNumber = "135"
+            startingLineNumber = "136"
+            endingLineNumber = "136"
             landmarkName = "tableView(_:didSelectRowAtIndexPath:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -90,42 +90,42 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChatChatOnFire/DataReconstruction.swift"
-            timestampString = "495502316.06685"
+            timestampString = "495611465.23516"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "46"
-            endingLineNumber = "46"
-            landmarkName = "getMessage()"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
+            landmarkName = "getUser()"
             landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "ChatChatOnFire.DataReconstruction.(getMessage () -&gt; ()).(closure #1).(closure #1)"
+                  symbolName = "ChatChatOnFire.DataReconstruction.getUser () -&gt; ()"
                   moduleName = "ChatChatOnFire"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/linwei/Desktop/IOS%20Project/AugustProejct/ChatChatOnFire/ChatChatOnFire/DataReconstruction.swift"
-                  timestampString = "495502316.081338"
+                  timestampString = "495611466.345497"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "46"
-                  endingLineNumber = "46"
-                  offsetFromSymbolStart = "442">
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "810">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "ChatChatOnFire.DataReconstruction.(getMessage () -&gt; ()).(closure #1).(closure #1).(closure #1)"
+                  symbolName = "ChatChatOnFire.DataReconstruction.(getUser () -&gt; ()).(closure #1)"
                   moduleName = "ChatChatOnFire"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/linwei/Desktop/IOS%20Project/AugustProejct/ChatChatOnFire/ChatChatOnFire/DataReconstruction.swift"
-                  timestampString = "495502316.081466"
+                  timestampString = "495611466.345674"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "46"
-                  endingLineNumber = "46"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
                   offsetFromSymbolStart = "172">
                </Location>
             </Locations>

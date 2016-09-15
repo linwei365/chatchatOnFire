@@ -16,20 +16,21 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
     let cellID = "cellID"
     let dataConstruction = DataReconstruction()
  
-    
+        var msgDictionary =  [String: AnyObject]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//      
-          dataConstruction.getMessage()
-//        
-//        print(dataConstruction.messageID)
+        msgDictionary = [String: AnyObject]()
+        dataConstruction.getMessage { (dictionary) in
+            
+            
+            self.msgDictionary = dictionary
+        }
         
+        print(msgDictionary["text"])
         
-        
-        
-
+        dataConstruction.getUser()
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .Plain, target: self, action: #selector(handleLogOut))
         
@@ -67,7 +68,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
 
                  messagesReference.observeEventType(.ChildRemoved, withBlock: { (snapshot) in
                     
-                  
+                   
                     
                     self.messagesDictionary.removeValueForKey(snapshot.key)
                     self.handleReloadTable()
