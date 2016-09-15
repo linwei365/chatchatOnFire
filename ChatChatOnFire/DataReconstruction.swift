@@ -14,7 +14,6 @@ class DataReconstruction: NSObject {
     
     var messageID:String?
     
-   var users = [User]()
     
     override init() {
             super.init()
@@ -24,8 +23,7 @@ class DataReconstruction: NSObject {
          }
         
         self.getUsers { (users) in
-            
-          self.users = users
+       
         }
  
     }
@@ -45,16 +43,13 @@ class DataReconstruction: NSObject {
                     //get messageID
                     self.getPrivateMessageIDWithFromIDAndToID(fromID, toID: toID, completion: { (messageID) in
                         
-                        
-                       //get message
+                        //get message
                         FIRDatabase.database().reference().child("messages").child(messageID).observeEventType(.Value, withBlock: { (snapshotC) in
                             
                             if  let dictionary =  snapshotC.value as? [String: AnyObject]{
-                               
                                 
                                 completion(dictionary: dictionary)
-//                                print(dictionary["text"])
-                            }
+                             }
 
                             }, withCancelBlock: nil)
    
@@ -76,11 +71,10 @@ class DataReconstruction: NSObject {
             
             //get message ID
           self.messageID = snapshotB.key
-       
             
             completion(messageID: self.messageID!)
-
-            }, withCancelBlock: nil)
+            
+             }, withCancelBlock: nil)
         
         
     }
@@ -88,7 +82,7 @@ class DataReconstruction: NSObject {
     
     func getUsers(comppletion:(users:[User])->())  {
         //getting current user uuid
-           var users = [User]()
+       
         
         if let currentUserId =  FIRAuth.auth()?.currentUser?.uid {
             
@@ -96,23 +90,21 @@ class DataReconstruction: NSObject {
         let userRefence = FIRDatabase.database().reference().child("users")
          userRefence.observeEventType(.ChildAdded, withBlock: { (snapshot) in
             
-//            print(snapshot.value)
+ 
             
             if let dicitonary = snapshot.value as? [String: AnyObject] {
-                
-                
-                
+ 
                 
                 let user:User = User()
                 user.id = snapshot.key
-                
-                
-               
+  
+               //filter out current user profile
                 if currentUserId != user.id {
                     
                     //this will crash if the firebase key doesn't match to the string key set up in the model
                     user.setValuesForKeysWithDictionary(dicitonary)
-          
+                
+                    var users = [User]()
                     
                       users.append(user)
 //                    print(users)
