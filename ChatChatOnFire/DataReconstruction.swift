@@ -22,7 +22,7 @@ class DataReconstruction: NSObject {
            self.getMessage { (dictionary) in
             
          }
-           self.getUser()
+           self.getUsers()
  
     }
 
@@ -82,12 +82,12 @@ class DataReconstruction: NSObject {
     }
     
     
-    func getUser( )  {
+    func getUsers( )  {
         //getting current user uuid
         if let uuid =  FIRAuth.auth()?.currentUser?.uid {
             
         //getting userReference Observing from UUID
-        let userRefence = FIRDatabase.database().reference().child(uuid)
+        let userRefence = FIRDatabase.database().reference().child("users").child(uuid)
          userRefence.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
             
             print(snapshot.key)

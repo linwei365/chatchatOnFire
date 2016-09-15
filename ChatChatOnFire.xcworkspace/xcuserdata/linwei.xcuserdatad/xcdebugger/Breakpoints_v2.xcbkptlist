@@ -95,33 +95,33 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "94"
             endingLineNumber = "94"
-            landmarkName = "getUser()"
+            landmarkName = "getUsers()"
             landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "ChatChatOnFire.DataReconstruction.getUser () -&gt; ()"
+                  symbolName = "ChatChatOnFire.DataReconstruction.getUsers () -&gt; ()"
                   moduleName = "ChatChatOnFire"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/linwei/Desktop/IOS%20Project/AugustProejct/ChatChatOnFire/ChatChatOnFire/DataReconstruction.swift"
-                  timestampString = "495611466.345497"
+                  timestampString = "495611598.986691"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "96"
                   endingLineNumber = "96"
-                  offsetFromSymbolStart = "810">
+                  offsetFromSymbolStart = "916">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "ChatChatOnFire.DataReconstruction.(getUser () -&gt; ()).(closure #1)"
+                  symbolName = "ChatChatOnFire.DataReconstruction.(getUsers () -&gt; ()).(closure #1)"
                   moduleName = "ChatChatOnFire"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/linwei/Desktop/IOS%20Project/AugustProejct/ChatChatOnFire/ChatChatOnFire/DataReconstruction.swift"
-                  timestampString = "495611466.345674"
+                  timestampString = "495611598.986885"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "96"

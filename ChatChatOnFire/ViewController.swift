@@ -30,7 +30,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         
         print(msgDictionary["text"])
         
-        dataConstruction.getUser()
+        dataConstruction.getUsers()
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .Plain, target: self, action: #selector(handleLogOut))
         
