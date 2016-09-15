@@ -14,7 +14,7 @@ class DataReconstruction: NSObject {
     
     var messageID:String?
     
- 
+   var users = [User]()
     
     override init() {
             super.init()
@@ -22,7 +22,11 @@ class DataReconstruction: NSObject {
            self.getMessage { (dictionary) in
             
          }
-           self.getUsers()
+        self.users = [User]()
+        self.getUsers { (users) in
+            
+            print(users)
+        }
  
     }
 
@@ -49,7 +53,7 @@ class DataReconstruction: NSObject {
                                
                                 
                                 completion(dictionary: dictionary)
-                                print(dictionary["text"])
+//                                print(dictionary["text"])
                             }
 
                             }, withCancelBlock: nil)
@@ -82,15 +86,46 @@ class DataReconstruction: NSObject {
     }
     
     
-    func getUsers( )  {
+    func getUsers(comppletion:(users:[User])->())  {
         //getting current user uuid
-        if let uuid =  FIRAuth.auth()?.currentUser?.uid {
+        
+        if let currentUserId =  FIRAuth.auth()?.currentUser?.uid {
             
         //getting userReference Observing from UUID
         let userRefence = FIRDatabase.database().reference().child("users")
          userRefence.observeEventType(.ChildAdded, withBlock: { (snapshot) in
             
-            print(snapshot.value)
+//            print(snapshot.value)
+            
+            if let dicitonary = snapshot.value as? [String: AnyObject] {
+                
+                
+                
+                
+                let user:User = User()
+                user.id = snapshot.key
+                
+                
+               
+                if currentUserId != user.id {
+                    
+                    //this will crash if the firebase key doesn't match to the string key set up in the model
+                    user.setValuesForKeysWithDictionary(dicitonary)
+          
+                    
+                      self.users.append(user)
+                    print(self.users)
+                    
+                    comppletion(users: self.users)
+                    
+                }
+                
+                
+                
+ 
+                
+            }
+            
             
             
             }, withCancelBlock: nil)
