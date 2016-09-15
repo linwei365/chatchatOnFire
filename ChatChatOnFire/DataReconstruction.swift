@@ -87,10 +87,10 @@ class DataReconstruction: NSObject {
         if let uuid =  FIRAuth.auth()?.currentUser?.uid {
             
         //getting userReference Observing from UUID
-        let userRefence = FIRDatabase.database().reference().child("users").child(uuid)
-         userRefence.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
+        let userRefence = FIRDatabase.database().reference().child("users")
+         userRefence.observeEventType(.ChildAdded, withBlock: { (snapshot) in
             
-            print(snapshot.key)
+            print(snapshot.value)
             
             
             }, withCancelBlock: nil)
