@@ -22,10 +22,10 @@ class DataReconstruction: NSObject {
            self.getMessage { (dictionary) in
             
          }
-        self.users = [User]()
+        
         self.getUsers { (users) in
             
-            print(users)
+          self.users = users
         }
  
     }
@@ -88,6 +88,7 @@ class DataReconstruction: NSObject {
     
     func getUsers(comppletion:(users:[User])->())  {
         //getting current user uuid
+           var users = [User]()
         
         if let currentUserId =  FIRAuth.auth()?.currentUser?.uid {
             
@@ -113,10 +114,10 @@ class DataReconstruction: NSObject {
                     user.setValuesForKeysWithDictionary(dicitonary)
           
                     
-                      self.users.append(user)
-                    print(self.users)
+                      users.append(user)
+//                    print(users)
                     
-                    comppletion(users: self.users)
+                    comppletion(users: users)
                     
                 }
                 

@@ -20,6 +20,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
     
     override func viewDidLoad() {
         super.viewDidLoad()
+     dataConstruction.users = [User]()
         
         msgDictionary = [String: AnyObject]()
         dataConstruction.getMessage { (dictionary) in
@@ -31,8 +32,9 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         print(msgDictionary["text"])
         
         dataConstruction.getUsers { (users) in
-            
+            self.dataConstruction.users = users
         }
+        print(dataConstruction.users)
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .Plain, target: self, action: #selector(handleLogOut))
         
