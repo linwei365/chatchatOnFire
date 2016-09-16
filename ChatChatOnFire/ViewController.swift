@@ -18,9 +18,10 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
  
         var msgDictionary =  [String: AnyObject]()
     
+     var usersA = [User]()
     override func viewDidLoad() {
         super.viewDidLoad()
-    var usersA = [User]()
+   
         
         msgDictionary = [String: AnyObject]()
         dataConstruction.getMessage { (dictionary) in
@@ -32,9 +33,13 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         print(msgDictionary["text"])
         
         dataConstruction.getUsers { (users) in
-           usersA = users
+          
+            
+                self.usersA = users
+             
+       
         }
-        print(usersA)
+      
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .Plain, target: self, action: #selector(handleLogOut))
         
@@ -269,7 +274,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         
 
         
-        
+           print(self.usersA[0].email)
         
         return cell
     }

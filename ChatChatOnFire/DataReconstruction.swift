@@ -82,7 +82,7 @@ class DataReconstruction: NSObject {
     
     func getUsers(comppletion:(users:[User])->())  {
         //getting current user uuid
-       
+            var users = [User]()
         
         if let currentUserId =  FIRAuth.auth()?.currentUser?.uid {
             
@@ -104,10 +104,10 @@ class DataReconstruction: NSObject {
                     //this will crash if the firebase key doesn't match to the string key set up in the model
                     user.setValuesForKeysWithDictionary(dicitonary)
                 
-                    var users = [User]()
+               
                     
                       users.append(user)
-//                    print(users)
+                      print(users)
                     
                     comppletion(users: users)
                     
