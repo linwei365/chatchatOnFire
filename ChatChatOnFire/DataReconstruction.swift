@@ -89,11 +89,8 @@ class DataReconstruction: NSObject {
         //getting userReference Observing from UUID
         let userRefence = FIRDatabase.database().reference().child("users")
          userRefence.observeEventType(.ChildAdded, withBlock: { (snapshot) in
-            
- 
-            
-            if let dicitonary = snapshot.value as? [String: AnyObject] {
- 
+    
+             if let dicitonary = snapshot.value as? [String: AnyObject] {
                 
                 let user:User = User()
                 user.id = snapshot.key
@@ -104,33 +101,48 @@ class DataReconstruction: NSObject {
                     //this will crash if the firebase key doesn't match to the string key set up in the model
                     user.setValuesForKeysWithDictionary(dicitonary)
                 
-               
-                    
-                      users.append(user)
+                        users.append(user)
                       print(users)
                     
                     comppletion(users: users)
                     
                 }
-                
-                
-                
- 
-                
-            }
+  
+             }
             
-            
+            self.timer?.invalidate()
+            self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
             
             }, withCancelBlock: nil)
             
+            
         }
-        
-        
+  
     
     }
+   var timer: NSTimer?
     
     
-    
+    func handleReloadTable()  {
+        
+//        
+//        self.messages = Array(self.messagesDictionary.values)
+//        
+//        //sort
+//        self.messages.sortInPlace({ (message1, message2) -> Bool in
+//            
+//            return message1.timeStamp?.intValue > message2.timeStamp?.intValue
+//        })
+//        
+//        
+//        dispatch_async(dispatch_get_main_queue(), {
+//            
+//            self.tableView.reloadData()
+//            
+//            
+//        })
+        
+    }
     
     
 }
