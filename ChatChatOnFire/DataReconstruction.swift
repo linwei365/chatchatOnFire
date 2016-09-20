@@ -110,8 +110,6 @@ class DataReconstruction: NSObject {
   
              }
             
-            self.timer?.invalidate()
-            self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
             
             }, withCancelBlock: nil)
             
@@ -121,30 +119,7 @@ class DataReconstruction: NSObject {
     
     }
 
-    //use it in controller
-    var timer: NSTimer?
-    
-    
-    func handleReloadTable()  {
-        
-//        
-//        self.messages = Array(self.messagesDictionary.values)
-//        
-//        //sort
-//        self.messages.sortInPlace({ (message1, message2) -> Bool in
-//            
-//            return message1.timeStamp?.intValue > message2.timeStamp?.intValue
-//        })
-//        
-//        
-        dispatch_async(dispatch_get_main_queue(), {
-            
-//            self.tableView.reloadData()
-            
-            
-        })
-        
-    }
+ 
     
     
 }
