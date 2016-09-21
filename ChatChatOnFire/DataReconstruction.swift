@@ -14,6 +14,7 @@ class DataReconstruction: NSObject {
     
     var messageID:String?
     
+    var messages = [Message]()
     
     override init() {
             super.init()
