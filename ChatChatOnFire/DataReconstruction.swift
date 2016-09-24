@@ -16,12 +16,22 @@ class DataReconstruction: NSObject {
     
     var messages = [Message]()
     var users = [User]()
-    
+       var messagesDictionary =  [String: Message]()
     
     override init() {
             super.init()
         
+        
            self.getMessage { (dictionary) in
+ 
+            print(dictionary)
+            let message = Message(dictionary: dictionary)
+            if let partnerID = message.chatPartnerId(){
+                
+                self.messagesDictionary[partnerID] = message
+                
+                self.handleMessage(self.messagesDictionary)
+            }
             
          }
         
@@ -63,6 +73,25 @@ class DataReconstruction: NSObject {
         }
         
        
+    }
+    
+    
+    var timer: NSTimer?
+    
+    func handleMessage(messageDic:[String:Message])  {
+        
+        
+        self.messages = Array(messageDic.values)
+        
+        //sort
+        self.messages.sortInPlace({ (message1, message2) -> Bool in
+            
+            return message1.timeStamp?.intValue > message2.timeStamp?.intValue
+        })
+        
+        
+        print("\(self.messages)------------------------------test print" )
+        
     }
     
     
