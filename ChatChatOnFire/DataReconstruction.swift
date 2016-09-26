@@ -81,16 +81,7 @@ class DataReconstruction: NSObject {
     func handleMessage(messageDic:[String:Message])  {
         
         
-        self.messages = Array(messageDic.values)
-        
-        //sort
-        self.messages.sortInPlace({ (message1, message2) -> Bool in
-            
-            return message1.timeStamp?.intValue > message2.timeStamp?.intValue
-        })
-        
-        
-        print("\(self.messages)------------------------------test print" )
+ 
         
     }
     

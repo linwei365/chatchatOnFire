@@ -90,45 +90,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChatChatOnFire/ViewController.swift"
-            timestampString = "496382711.599647"
+            timestampString = "496382828.613059"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "35"
-            endingLineNumber = "35"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
             landmarkName = "viewDidLoad()"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ChatChatOnFire.ViewController.viewDidLoad () -&gt; ()"
-                  moduleName = "ChatChatOnFire"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/linwei/Desktop/IOS%20Project/AugustProejct/ChatChatOnFire/ChatChatOnFire/ViewController.swift"
-                  timestampString = "496382711.605354"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "35"
-                  endingLineNumber = "35"
-                  offsetFromSymbolStart = "740">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ChatChatOnFire.ViewController.(viewDidLoad () -&gt; ()).(closure #2)"
-                  moduleName = "ChatChatOnFire"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/linwei/Desktop/IOS%20Project/AugustProejct/ChatChatOnFire/ChatChatOnFire/ViewController.swift"
-                  timestampString = "496382711.605518"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "38"
-                  endingLineNumber = "38"
-                  offsetFromSymbolStart = "16">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

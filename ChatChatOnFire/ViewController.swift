@@ -40,6 +40,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
        
         }
       
+        print(dataConstruction.messages)
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .Plain, target: self, action: #selector(handleLogOut))
         
