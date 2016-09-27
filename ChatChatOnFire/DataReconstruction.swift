@@ -92,6 +92,7 @@ class DataReconstruction: NSObject {
         let messageIDRef = FIRDatabase.database().reference().child("user-messages").child(fromID).child(toID)
         messageIDRef.observeEventType(.ChildAdded, withBlock: { (snapshotB) in
             
+           print(snapshotB)
             //get message ID
           self.messageID = snapshotB.key
             
