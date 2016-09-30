@@ -41,14 +41,14 @@ class DataReconstruction: NSObject {
  
     }
 
-    func getMessage(completion:(dictionary:[String: AnyObject])->())  {
+    func getMessage(_ completion:@escaping (_ dictionary:[String: AnyObject])->())  {
         //getting individual message
         if let fromID =  FIRAuth.auth()?.currentUser?.uid{
             
             //getting toID
             let messageRef = FIRDatabase.database().reference().child("user-messages").child(fromID)
             
-                messageRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snashot) in
+                messageRef.observeSingleEvent(of: .childAdded, with: { (snashot) in
      
                     //getting toID
                     let toID = snashot.key
@@ -57,18 +57,18 @@ class DataReconstruction: NSObject {
                     self.getPrivateMessageIDWithFromIDAndToID(fromID, toID: toID, completion: { (messageID) in
                         
                         //get message
-                        FIRDatabase.database().reference().child("messages").child(messageID).observeEventType(.Value, withBlock: { (snapshotC) in
+                        FIRDatabase.database().reference().child("messages").child(messageID).observe(.value, with: { (snapshotC) in
                             
                             if  let dictionary =  snapshotC.value as? [String: AnyObject]{
                                 
-                                completion(dictionary: dictionary)
+                                completion(dictionary)
                              }
 
-                            }, withCancelBlock: nil)
+                            }, withCancel: nil)
    
                     })
 
-                    }, withCancelBlock: nil)
+                    }, withCancel: nil)
             
         }
         
@@ -76,9 +76,9 @@ class DataReconstruction: NSObject {
     }
     
     
-    var timer: NSTimer?
+    var timer: Timer?
     
-    func handleMessage(messageDic:[String:Message])  {
+    func handleMessage(_ messageDic:[String:Message])  {
         
         
  
@@ -87,24 +87,24 @@ class DataReconstruction: NSObject {
     
     
     //get message ID
-    func getPrivateMessageIDWithFromIDAndToID(fromID:String, toID:String, completion:(messageID: String)-> ())   {
+    func getPrivateMessageIDWithFromIDAndToID(_ fromID:String, toID:String, completion:@escaping (_ messageID: String)-> ())   {
 
         let messageIDRef = FIRDatabase.database().reference().child("user-messages").child(fromID).child(toID)
-        messageIDRef.observeEventType(.ChildAdded, withBlock: { (snapshotB) in
+        messageIDRef.observe(.childAdded, with: { (snapshotB) in
             
            print(snapshotB)
             //get message ID
           self.messageID = snapshotB.key
             
-            completion(messageID: self.messageID!)
+            completion(self.messageID!)
             
-             }, withCancelBlock: nil)
+             }, withCancel: nil)
         
         
     }
     
     
-    func getUsers(comppletion:(users:[User])->())  {
+    func getUsers(_ comppletion:@escaping (_ users:[User])->())  {
         //getting current user uuid
             var users = [User]()
         
@@ -112,7 +112,7 @@ class DataReconstruction: NSObject {
             
         //getting userReference Observing from UUID
         let userRefence = FIRDatabase.database().reference().child("users")
-         userRefence.observeEventType(.ChildAdded, withBlock: { (snapshot) in
+         userRefence.observe(.childAdded, with: { (snapshot) in
     
              if let dicitonary = snapshot.value as? [String: AnyObject] {
                 
@@ -123,19 +123,19 @@ class DataReconstruction: NSObject {
                 if currentUserId != user.id {
                     
                     //this will crash if the firebase key doesn't match to the string key set up in the model
-                    user.setValuesForKeysWithDictionary(dicitonary)
+                    user.setValuesForKeys(dicitonary)
                 
                         users.append(user)
                       print(users)
                     
-                    comppletion(users: users)
+                    comppletion(users)
                     
                 }
   
              }
             
             
-            }, withCancelBlock: nil)
+            }, withCancel: nil)
             
             
         }

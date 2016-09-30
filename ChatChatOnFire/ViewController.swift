@@ -8,6 +8,26 @@
 
 import UIKit
 import Firebase
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class ViewController: UITableViewController,LoginViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
@@ -42,15 +62,15 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
       
         print(dataConstruction.messages)
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .Plain, target: self, action: #selector(handleLogOut))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogOut))
         
         let image = UIImage(named: "addNote")
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .Plain, target: self, action: #selector(handleNewMessage))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleNewMessage))
         
  
 //        observeMessages()
-        tableView.registerClass(UserCell.self, forCellReuseIdentifier: cellID)
+        tableView.register(UserCell.self, forCellReuseIdentifier: cellID)
     }
     
     func observeUserMessages( )  {
@@ -59,16 +79,16 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         }
         
         let ref = FIRDatabase.database().reference().child("user-messages").child(uid)
-        ref.observeEventType(.ChildAdded, withBlock: { (snapshot:FIRDataSnapshot) in
+        ref.observe(.childAdded, with: { (snapshot:FIRDataSnapshot) in
         
          let userID = snapshot.key
   
-            FIRDatabase.database().reference().child("user-messages").child(uid).child(userID).observeEventType(.ChildAdded, withBlock: { (snapshot) in
+            FIRDatabase.database().reference().child("user-messages").child(uid).child(userID).observe(.childAdded, with: { (snapshot) in
       
                 let messageId = snapshot.key
  
                 let messagesReference = FIRDatabase.database().reference().child("messages").child(messageId)
-                messagesReference.observeSingleEventOfType(.Value, withBlock: { (snapshot:FIRDataSnapshot) in
+                messagesReference.observeSingleEvent(of: .value, with: { (snapshot:FIRDataSnapshot) in
                 if let dicionary = snapshot.value as? [String: AnyObject]{
                 let message = Message(dictionary: dicionary)
                 //                self.messages.append(message)
@@ -76,32 +96,32 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
                 //passing the vaule align to the same key accordingly into dictionary
                 self.messagesDictionary[chatPartnerID] = message
 
-                 messagesReference.observeEventType(.ChildRemoved, withBlock: { (snapshot) in
+                 messagesReference.observe(.childRemoved, with: { (snapshot) in
                     
                    
                     
-                    self.messagesDictionary.removeValueForKey(snapshot.key)
+                    self.messagesDictionary.removeValue(forKey: snapshot.key)
                     self.handleReloadTable()
                     
-                    }, withCancelBlock: nil)
+                    }, withCancel: nil)
                             
                         }
                     
                         self.timer?.invalidate()
-                        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
+                        self.timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
                         
                     } 
                     
-                    }, withCancelBlock: nil)
+                    }, withCancel: nil)
 
-                }, withCancelBlock: nil)
+                }, withCancel: nil)
 
-            }, withCancelBlock: nil)
+            }, withCancel: nil)
     }
     
  
     
-    var timer: NSTimer?
+    var timer: Timer?
     
     func handleReloadTable()  {
         
@@ -109,13 +129,13 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         self.messages = Array(self.messagesDictionary.values)
         
         //sort
-        self.messages.sortInPlace({ (message1, message2) -> Bool in
+        self.messages.sort(by: { (message1, message2) -> Bool in
             
-            return message1.timeStamp?.intValue > message2.timeStamp?.intValue
+            return message1.timeStamp?.int32Value > message2.timeStamp?.int32Value
         })
         
         
-        dispatch_async(dispatch_get_main_queue(), {
+        DispatchQueue.main.async(execute: {
           
             self.tableView.reloadData()
             
@@ -125,15 +145,15 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
     }
     
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let message = messages[indexPath.row]
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let message = messages[(indexPath as NSIndexPath).row]
         
         guard let chatPartnerId = message.chatPartnerId() else {
             return
         }
         
         let ref = FIRDatabase.database().reference().child("users").child(chatPartnerId)
-        ref.observeSingleEventOfType(.Value, withBlock: { (snapshot:FIRDataSnapshot) in
+        ref.observeSingleEvent(of: .value, with: { (snapshot:FIRDataSnapshot) in
            
             guard let dictionary = snapshot.value as? [String: AnyObject] else {
                 return
@@ -141,20 +161,20 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
             
             let user = User()
             user.id = chatPartnerId
-            user.setValuesForKeysWithDictionary(dictionary)
+            user.setValuesForKeys(dictionary)
             
             self.showChatControllerForUser(user)
             
-            }, withCancelBlock: nil)
+            }, withCancel: nil)
         
     }
     
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
  
         
@@ -200,13 +220,13 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
     
     var isFriend:Bool?
     
-    func observerIsFriend(FromID: String, toID:String ){
+    func observerIsFriend(_ FromID: String, toID:String ){
         
         let currentUserFriend = Friend()
         let toFriend = Friend()
         let currentUserRef = FIRDatabase.database().reference().child("users").child(FromID).child("friends").child(toID)
         
-        currentUserRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
+        currentUserRef.observeSingleEvent(of: .childAdded, with: { (snapshot) in
             
             
             
@@ -215,7 +235,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
             
             let fromRef = FIRDatabase.database().reference().child("users").child(toID).child("friends").child(FromID)
             
-            fromRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
+            fromRef.observeSingleEvent(of: .childAdded, with: { (snapshot) in
                 
                 toFriend.isFriend = snapshot.value as? Bool
                 print("hhh \(currentUserFriend.isFriend)")
@@ -237,10 +257,10 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
                 }
                 
                 
-                }, withCancelBlock: nil)
+                }, withCancel: nil)
             
             
-            }, withCancelBlock: nil)
+            }, withCancel: nil)
         
         
         
@@ -248,14 +268,14 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-         let cell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath) as! UserCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! UserCell
    
       
         let currentID = FIRAuth.auth()?.currentUser?.uid
         
         
-        let message = messages[indexPath.row]
+        let message = messages[(indexPath as NSIndexPath).row]
         
         if isFriend == false {
            
@@ -288,11 +308,11 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
             newMessageVC.messageController = self
         
         let navigationController = UINavigationController(rootViewController: newMessageVC)
-        presentViewController(navigationController, animated: true , completion: nil)
+        present(navigationController, animated: true , completion: nil)
         
     } 
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         //this is a temp solution while its ok since the data not big it gets called everytime change view back to this view
       //user is not logged in check then sign out
@@ -317,13 +337,13 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
             
             //add delay on handleLogOut call
             
-            performSelector(#selector(handleLogOut), withObject: nil, afterDelay: 0)
+            perform(#selector(handleLogOut), with: nil, afterDelay: 0)
             
         } else {
             
             let uid = FIRAuth.auth()?.currentUser?.uid
             //fetch
-            FIRDatabase.database().reference().child("users").child(uid!).observeEventType(FIRDataEventType.Value, withBlock: { (snapshot) in
+            FIRDatabase.database().reference().child("users").child(uid!).observe(FIRDataEventType.value, with: { (snapshot) in
                 
                 
                 if let dictionary = snapshot.value as? [String:AnyObject]{
@@ -331,7 +351,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
                     
                     let user = User()
                     
-                    user.setValuesForKeysWithDictionary(dictionary)
+                    user.setValuesForKeys(dictionary)
                     self.setupNavigaionBarWithUser(user)
                     
                     
@@ -339,7 +359,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
 
                 }
                 
-                }, withCancelBlock: nil)
+                }, withCancel: nil)
             
         }
     }
@@ -354,7 +374,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         
     }()
     
-    func setupNavigaionBarWithUser(user:User)  {
+    func setupNavigaionBarWithUser(_ user:User)  {
         messages.removeAll()
         messagesDictionary.removeAll()
        tableView.reloadData()
@@ -365,12 +385,12 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         
         //create an UIView
         let titleView = UIView()
-         titleView.frame = CGRectMake(0, 0, 100, 40)
+         titleView.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
     
          //set UIView to navi title view
         self.navigationItem.titleView = titleView
         titleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleProfileImageView)))
-        titleView.userInteractionEnabled = true
+        titleView.isUserInteractionEnabled = true
    
  
         
@@ -393,7 +413,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         profileImageView.layer.cornerRadius = 20
         profileImageView.layer.masksToBounds = true
-        profileImageView.contentMode = .ScaleAspectFill
+        profileImageView.contentMode = .scaleAspectFill
         
         //create an UILabel
         let nameLabel = UILabel()
@@ -407,18 +427,18 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         containerView.addSubview(nameLabel)
         
         //ios 9 constraint for imageView x, y, width, height
-        containerView.centerXAnchor.constraintEqualToAnchor(titleView.centerXAnchor).active = true
-        containerView.centerYAnchor.constraintEqualToAnchor(titleView.centerYAnchor).active = true
+        containerView.centerXAnchor.constraint(equalTo: titleView.centerXAnchor).isActive = true
+        containerView.centerYAnchor.constraint(equalTo: titleView.centerYAnchor).isActive = true
         
-        profileImageView.leftAnchor.constraintEqualToAnchor(containerView.leftAnchor).active = true
-        profileImageView.centerYAnchor.constraintEqualToAnchor(containerView.centerYAnchor).active = true
-        profileImageView.widthAnchor.constraintEqualToConstant(40).active = true
-        profileImageView.heightAnchor.constraintEqualToConstant(40).active = true
+        profileImageView.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
+        profileImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        profileImageView.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        profileImageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        nameLabel.leftAnchor.constraintEqualToAnchor(profileImageView.rightAnchor, constant: 8).active = true
-        nameLabel.centerYAnchor.constraintEqualToAnchor(profileImageView.centerYAnchor).active = true
-        nameLabel.rightAnchor.constraintEqualToAnchor(containerView.rightAnchor).active = true
-        nameLabel.heightAnchor.constraintEqualToAnchor(profileImageView.heightAnchor).active = true
+        nameLabel.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 8).isActive = true
+        nameLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor).isActive = true
+        nameLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
+        nameLabel.heightAnchor.constraint(equalTo: profileImageView.heightAnchor).isActive = true
         
   
         
@@ -437,17 +457,17 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         picker.delegate = self
         //gives crop operation
         picker.allowsEditing = true
-        presentViewController(picker, animated: true, completion: nil)
+        present(picker, animated: true, completion: nil)
         
         
     }
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         print("canceled picker ")
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
         
     }
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
         var selectedImage:UIImage?
         
@@ -462,17 +482,17 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
             
         }
         
-        if let image = selectedImage, uploadData = UIImageJPEGRepresentation(image, 0.1) {
+        if let image = selectedImage, let uploadData = UIImageJPEGRepresentation(image, 0.1) {
             
             let uid = FIRAuth.auth()?.currentUser?.uid
             
-            FIRDatabase.database().reference().child("users").child(uid!).observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+            FIRDatabase.database().reference().child("users").child(uid!).observeSingleEvent(of: .value, with: { (snapshot) in
              
                 
                 if  let userDictionary = snapshot.value as? [String:AnyObject] {
                     
                     let user = User()
-                    user.setValuesForKeysWithDictionary(userDictionary)
+                    user.setValuesForKeys(userDictionary)
                     
                     print()
                     
@@ -480,7 +500,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
                         
                         let storageRef = FIRStorage.storage().reference().child("Profile_Images").child("\(imageUID).jpg")
                         
-                        storageRef.putData(uploadData, metadata: nil, completion: { (metadata:FIRStorageMetadata?, error) in
+                        storageRef.put(uploadData, metadata: nil, completion: { (metadata:FIRStorageMetadata?, error) in
                             if error != nil {
                                 print(error)
                                 return
@@ -490,7 +510,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
                             if let userProfileImageUrl = metadata?.downloadURL()?.absoluteString {
                                 
                                 let values = ["profileImageUrl": userProfileImageUrl]
-                                self.registerUserToFireDatabaseWithParameters(uid!, values: values)
+                                self.registerUserToFireDatabaseWithParameters(uid!, values: values as [String : AnyObject])
                                 
                                 
                                 
@@ -512,7 +532,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
             //output needs to save out the image
         }
         
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
         
         
     }
@@ -521,9 +541,9 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
     
     //refractoring handling register User to database
     
-    private  func registerUserToFireDatabaseWithParameters(uid:String, values: [String: AnyObject] )   {
+    fileprivate  func registerUserToFireDatabaseWithParameters(_ uid:String, values: [String: AnyObject] )   {
         //firebase datebase refrence url
-        let ref = FIRDatabase.database().referenceFromURL("https://chatchatonfire.firebaseio.com/")
+        let ref = FIRDatabase.database().reference(fromURL: "https://chatchatonfire.firebaseio.com/")
         
         //add child branch to users branch and to ref branch
         let userRef =  ref.child("users").child(uid)
@@ -543,7 +563,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
             //dismiss View
 //            self.dismissViewControllerAnimated(true, completion: nil)
             
-        })
+        } as! (Error?, FIRDatabaseReference) -> Void)
     }
 
     
@@ -566,7 +586,7 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
     //handle imagepicker end .....
  
     
-    func showChatControllerForUser(user:User)  {
+    func showChatControllerForUser(_ user:User)  {
         
         let chatLogViewController = ChatLogController(collectionViewLayout: UICollectionViewFlowLayout())
         
@@ -587,33 +607,33 @@ class ViewController: UITableViewController,LoginViewControllerDelegate, UIImage
         
         //jump to sigh up page
         let loginController =  LoginViewController()
-        presentViewController(loginController, animated: true, completion: nil)
+        present(loginController, animated: true, completion: nil)
         
         print("loging out")
         
     }
     
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
     
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
         guard let uid = FIRAuth.auth()?.currentUser?.uid else {
             return
         }
         
-        let message = messages[indexPath.row]
+        let message = messages[(indexPath as NSIndexPath).row]
         if let chatPartnerId = message.chatPartnerId(){
-            FIRDatabase.database().reference().child("user-messages").child(uid).child(chatPartnerId).removeValueWithCompletionBlock({ (error, reference) in
+            FIRDatabase.database().reference().child("user-messages").child(uid).child(chatPartnerId).removeValue(completionBlock: { (error, reference) in
                 if error != nil {
                     print(error)
                     return
                     
                 }
                 
-                self.messagesDictionary.removeValueForKey(message.chatPartnerId()!)
+                self.messagesDictionary.removeValue(forKey: message.chatPartnerId()!)
                 self.handleReloadTable()
 //                self.messages.removeAtIndex(indexPath.row)
 //                

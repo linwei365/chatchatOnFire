@@ -19,17 +19,17 @@ extension LoginViewController: UIImagePickerControllerDelegate, UINavigationCont
         picker.delegate = self
         //gives crop operation
         picker.allowsEditing = true
-        presentViewController(picker, animated: true, completion: nil)
+        present(picker, animated: true, completion: nil)
         
        
     }
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
       
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
         
     }
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
         var selectedImage:UIImage?
         
@@ -48,7 +48,7 @@ extension LoginViewController: UIImagePickerControllerDelegate, UINavigationCont
             loginLogoImageView.image = image
         }
         
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
   
         
     }
@@ -57,13 +57,13 @@ extension LoginViewController: UIImagePickerControllerDelegate, UINavigationCont
     //when button clicked  trigger action
     func handleRegister()  {
         //validate
-        guard let email = emailTextField.text, password = passwordTextField.text, name = nameTextField.text else {
+        guard let email = emailTextField.text, let password = passwordTextField.text, let name = nameTextField.text else {
             
             print("input is not valid")
             return
         }
         
-        FIRAuth.auth()?.createUserWithEmail(email, password: password, completion: { (user:FIRUser?, error:NSError?) in
+        FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user:FIRUser?, error:NSError?) in
             if error != nil {
                 
                 print(error)
@@ -78,7 +78,7 @@ extension LoginViewController: UIImagePickerControllerDelegate, UINavigationCont
                 
             } 
             //save data to dataStorage in firebase
-            let imageName = NSUUID().UUIDString
+            let imageName = UUID().uuidString
             let storageRef = FIRStorage.storage().reference().child("Profile_Images").child("\(imageName).jpg")
             
             
@@ -86,14 +86,14 @@ extension LoginViewController: UIImagePickerControllerDelegate, UINavigationCont
                 self.loginLogoImageView.image = UIImage(named: "profile_teaser")
             }  
             
-            if let profileImage = self.loginLogoImageView.image, uploadData = UIImageJPEGRepresentation(profileImage, 0.1){
+            if let profileImage = self.loginLogoImageView.image, let uploadData = UIImageJPEGRepresentation(profileImage, 0.1){
                 
             
             
 //            if let uploadData = UIImagePNGRepresentation(self.loginLogoImageView.image!){
               
                 //save image upload data to firestorage
-                storageRef.putData(uploadData, metadata: nil, completion: { (metadata:FIRStorageMetadata?, error) in
+                storageRef.put(uploadData, metadata: nil, completion: { (metadata:FIRStorageMetadata?, error) in
                     if error != nil {
                         print(error)
                         return
@@ -115,9 +115,9 @@ extension LoginViewController: UIImagePickerControllerDelegate, UINavigationCont
     
     //refractoring handling register User to database
     
-   private  func registerUserToFireDatabaseWithParameters(uid:String, values: [String: AnyObject] )   {
+   fileprivate  func registerUserToFireDatabaseWithParameters(_ uid:String, values: [String: AnyObject] )   {
         //firebase datebase refrence url
-        let ref = FIRDatabase.database().referenceFromURL("https://chatchatonfire.firebaseio.com/")
+        let ref = FIRDatabase.database().reference(fromURL: "https://chatchatonfire.firebaseio.com/")
         
         //add child branch to users branch and to ref branch
         let userRef =  ref.child("users").child(uid)
@@ -135,9 +135,9 @@ extension LoginViewController: UIImagePickerControllerDelegate, UINavigationCont
             //saved succesfully
             print("sign up created succesfully")
             //dismiss View
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
             
-        })
+        } as! (Error?, FIRDatabaseReference) -> Void)
     }
     
     

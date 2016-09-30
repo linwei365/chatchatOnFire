@@ -16,7 +16,7 @@
             startingLineNumber = "88"
             endingLineNumber = "88"
             landmarkName = "observerIsFriend(_:toID:)"
-            landmarkType = "5">
+            landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -64,22 +64,6 @@
             startingLineNumber = "105"
             endingLineNumber = "105"
             landmarkName = "handleRemoveFriend()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChatChatOnFire/DataReconstruction.swift"
-            timestampString = "496382655.136802"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "84"
-            endingLineNumber = "84"
-            landmarkName = "handleMessage(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

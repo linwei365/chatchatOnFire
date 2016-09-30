@@ -17,25 +17,25 @@ class NewMessageTableViewController: UITableViewController {
         super.viewDidLoad()
         
         
-        tableView.registerClass(FriendListTableViewCell.self, forCellReuseIdentifier: cellID)
+        tableView.register(FriendListTableViewCell.self, forCellReuseIdentifier: cellID)
         
         self.navigationItem.title = "Contacts"
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: #selector(handleCancelButtonAction))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancelButtonAction))
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add Friend", style: .Plain, target: self, action: #selector(handleAddContactButtonAction))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add Friend", style: .plain, target: self, action: #selector(handleAddContactButtonAction))
         
         fetchUsers()
         
         
     }
     
-    func observerIsFriend(FromID: String, toID:String ) -> Bool  {
+    func observerIsFriend(_ FromID: String, toID:String ) -> Bool  {
         
         let currentUserFriend = Friend()
         let toFriend = Friend()
         let currentUserRef = FIRDatabase.database().reference().child("users").child(FromID).child("friends").child(toID)
         
-        currentUserRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
+        currentUserRef.observeSingleEvent(of: .childAdded, with: { (snapshot) in
             
             
             
@@ -44,18 +44,18 @@ class NewMessageTableViewController: UITableViewController {
             
             print("hhh \(currentUserFriend.isFriend)")
             
-            }, withCancelBlock: nil)
+            }, withCancel: nil)
         
         let fromRef = FIRDatabase.database().reference().child("users").child(toID).child("friends").child(FromID)
         
-        fromRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
+        fromRef.observeSingleEvent(of: .childAdded, with: { (snapshot) in
             
             toFriend.isFriend = snapshot.value as? Bool
             
             
             print("fff \(currentUserFriend.isFriend)")
             
-            }, withCancelBlock: nil)
+            }, withCancel: nil)
         
         if currentUserFriend.isFriend == true && toFriend.isFriend == true {
             
@@ -68,7 +68,7 @@ class NewMessageTableViewController: UITableViewController {
     }
     
     func fetchUsers( )  {
-        FIRDatabase.database().reference().child("users").observeEventType(FIRDataEventType.ChildAdded , withBlock: { (snapshot:FIRDataSnapshot) in
+        FIRDatabase.database().reference().child("users").observe(FIRDataEventType.childAdded , with: { (snapshot:FIRDataSnapshot) in
             
             if let dicitonary = snapshot.value as? [String: AnyObject] {
 
@@ -83,7 +83,7 @@ class NewMessageTableViewController: UITableViewController {
                 if currentUserId != user.id {
                     
                     //this will crash if the firebase key doesn't match to the string key set up in the model
-                    user.setValuesForKeysWithDictionary(dicitonary)
+                    user.setValuesForKeys(dicitonary)
                     //safer way
                     //                user.name = dicitonary["name"] as! String
                     //                user.email = dicitonary["email"] as! String
@@ -95,14 +95,14 @@ class NewMessageTableViewController: UITableViewController {
                 
 
                 
-                dispatch_async(dispatch_get_main_queue(), { 
+                DispatchQueue.main.async(execute: { 
                     self.tableView.reloadData()
                 })
  
             }
             
  
-            }, withCancelBlock: nil)
+            }, withCancel: nil)
         
     }
     
@@ -114,13 +114,13 @@ class NewMessageTableViewController: UITableViewController {
         newMessageVC.addContactController = self
         
         let navigationController = UINavigationController(rootViewController: newMessageVC)
-        presentViewController(navigationController, animated: true , completion: nil)
+        present(navigationController, animated: true , completion: nil)
         
     }
     
     func handleCancelButtonAction()  {
         
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {
@@ -130,24 +130,24 @@ class NewMessageTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return users.count
     }
 
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellID , forIndexPath: indexPath) as! FriendListTableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID , for: indexPath) as! FriendListTableViewCell
 
 //        let  cell = UITableViewCell(style: .Subtitle, reuseIdentifier: cellID)
         
         
-        let user = users[indexPath.row]
+        let user = users[(indexPath as NSIndexPath).row]
         
         
         cell.newMessageController = self
@@ -184,7 +184,7 @@ class NewMessageTableViewController: UITableViewController {
     
     
     
-    func undoFriendRequest(user: User)   {
+    func undoFriendRequest(_ user: User)   {
         if let uid = FIRAuth.auth()?.currentUser?.uid {
             
             if let incomingUserId = user.id {
@@ -219,14 +219,14 @@ class NewMessageTableViewController: UITableViewController {
     
     
     
-    func sendMessageWithProperties(properties: [String: AnyObject] , user: User) {
+    func sendMessageWithProperties(_ properties: [String: AnyObject] , user: User) {
         
         let ref = FIRDatabase.database().reference().child("messages")
         let childRef = ref.childByAutoId()
         let toID = user.id!
         let fromID = FIRAuth.auth()!.currentUser!.uid
-        let timeStamp:NSNumber = Int(NSDate().timeIntervalSince1970)
-        var values: [String: AnyObject] = ["toID": toID, "fromID": fromID, "timeStamp":timeStamp]
+        let timeStamp:NSNumber = NSNumber(Int(Date().timeIntervalSince1970))
+        var values: [String: AnyObject] = ["toID": toID as AnyObject, "fromID": fromID as AnyObject, "timeStamp":timeStamp]
         
         //        childRef.updateChildValues(vaules)
         
@@ -258,14 +258,14 @@ class NewMessageTableViewController: UITableViewController {
     
     var messageController:ViewController?
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        dismissViewControllerAnimated(true) {
+        dismiss(animated: true) {
             
             
             
             
-            let user = self.users[indexPath.row]
+            let user = self.users[(indexPath as NSIndexPath).row]
             
             
              //pass user
@@ -320,7 +320,7 @@ class NewMessageTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
 

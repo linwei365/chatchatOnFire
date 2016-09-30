@@ -20,10 +20,10 @@ class AddContactsTableViewController: UITableViewController {
         super.viewDidLoad()
         
         
-        tableView.registerClass(AddContactListTableViewCell.self, forCellReuseIdentifier: cellID)
+        tableView.register(AddContactListTableViewCell.self, forCellReuseIdentifier: cellID)
         tableView.allowsSelection = false
         self.navigationItem.title = "Add Contacts"
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: #selector(handleCancelButtonAction))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancelButtonAction))
         
         
         
@@ -33,7 +33,7 @@ class AddContactsTableViewController: UITableViewController {
     }
     
     func fetchUsers( )  {
-        FIRDatabase.database().reference().child("users").observeEventType(FIRDataEventType.ChildAdded , withBlock: { (snapshot:FIRDataSnapshot) in
+        FIRDatabase.database().reference().child("users").observe(FIRDataEventType.childAdded , with: { (snapshot:FIRDataSnapshot) in
             
             if let dicitonary = snapshot.value as? [String: AnyObject] {
                 
@@ -50,7 +50,7 @@ class AddContactsTableViewController: UITableViewController {
                 if currentUserId != user.id {
                     
                     //this will crash if the firebase key doesn't match to the string key set up in the model
-                    user.setValuesForKeysWithDictionary(dicitonary)
+                    user.setValuesForKeys(dicitonary)
                     //safer way
                     //                user.name = dicitonary["name"] as! String
                     //                user.email = dicitonary["email"] as! String
@@ -59,19 +59,19 @@ class AddContactsTableViewController: UITableViewController {
                     self.users.append(user)
                 } else {
                     
-                    self.currentUser.setValuesForKeysWithDictionary(dicitonary)
+                    self.currentUser.setValuesForKeys(dicitonary)
                 }
                
                 
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.tableView.reloadData()
                 })
                 
             }
             
             
-            }, withCancelBlock: nil)
+            }, withCancel: nil)
         
     }
     
@@ -79,7 +79,7 @@ class AddContactsTableViewController: UITableViewController {
     
     func handleCancelButtonAction()  {
         
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {
@@ -89,24 +89,24 @@ class AddContactsTableViewController: UITableViewController {
     
     // MARK: - Table view data source
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return users.count
     }
     
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellID , forIndexPath: indexPath) as! AddContactListTableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID , for: indexPath) as! AddContactListTableViewCell
         
         //        let  cell = UITableViewCell(style: .Subtitle, reuseIdentifier: cellID)
         
         
-        let user = users[indexPath.row]
+        let user = users[(indexPath as NSIndexPath).row]
         
         
         cell.user = user
@@ -138,13 +138,13 @@ class AddContactsTableViewController: UITableViewController {
     
     var isFriend:Bool?
     
-    func observerIsFriend(FromID: String, toID:String ){
+    func observerIsFriend(_ FromID: String, toID:String ){
         
         let currentUserFriend = Friend()
         let toFriend = Friend()
         let currentUserRef = FIRDatabase.database().reference().child("users").child(FromID).child("friends").child(toID)
         
-        currentUserRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
+        currentUserRef.observeSingleEvent(of: .childAdded, with: { (snapshot) in
             
             
             
@@ -153,7 +153,7 @@ class AddContactsTableViewController: UITableViewController {
             
             let fromRef = FIRDatabase.database().reference().child("users").child(toID).child("friends").child(FromID)
             
-            fromRef.observeSingleEventOfType(.ChildAdded, withBlock: { (snapshot) in
+            fromRef.observeSingleEvent(of: .childAdded, with: { (snapshot) in
                 
                 toFriend.isFriend = snapshot.value as? Bool
                 print("hhh \(currentUserFriend.isFriend)")
@@ -175,10 +175,10 @@ class AddContactsTableViewController: UITableViewController {
                 }
                 
                 
-                }, withCancelBlock: nil)
+                }, withCancel: nil)
             
             
-            }, withCancelBlock: nil)
+            }, withCancel: nil)
         
         
         
@@ -186,7 +186,7 @@ class AddContactsTableViewController: UITableViewController {
         
     }
     
-    func sendFriendRequest(user: User)   {
+    func sendFriendRequest(_ user: User)   {
         
         
       
@@ -210,11 +210,11 @@ class AddContactsTableViewController: UITableViewController {
                         return
                     }
                     
-                    self.dismissViewControllerAnimated(true, completion: nil)
+                    self.dismiss(animated: true, completion: nil)
                     
                     let properties = ["text":"you have a friend reqeust from \(self.currentUser.name)"]
 //                    self.chatLogController.sendMessageWithProperties(properties)
-                     self.sendMessageWithProperties(properties, user: user)
+                     self.sendMessageWithProperties(properties as [String : AnyObject], user: user)
                     
                     print(ref)
                     
@@ -230,7 +230,7 @@ class AddContactsTableViewController: UITableViewController {
         
     }
     
-    func undoFriendRequest(user: User)   {
+    func undoFriendRequest(_ user: User)   {
         if let uid = FIRAuth.auth()?.currentUser?.uid {
             
             if let incomingUserId = user.id {
@@ -265,14 +265,14 @@ class AddContactsTableViewController: UITableViewController {
     
     
     
-    func sendMessageWithProperties(properties: [String: AnyObject] , user: User) {
+    func sendMessageWithProperties(_ properties: [String: AnyObject] , user: User) {
         
         let ref = FIRDatabase.database().reference().child("messages")
         let childRef = ref.childByAutoId()
         let toID = user.id!
         let fromID = FIRAuth.auth()!.currentUser!.uid
-        let timeStamp:NSNumber = Int(NSDate().timeIntervalSince1970)
-        var values: [String: AnyObject] = ["toID": toID, "fromID": fromID, "timeStamp":timeStamp]
+        let timeStamp:NSNumber = NSNumber(Int(Date().timeIntervalSince1970))
+        var values: [String: AnyObject] = ["toID": toID as AnyObject, "fromID": fromID as AnyObject, "timeStamp":timeStamp]
         
         //        childRef.updateChildValues(vaules)
         
@@ -300,7 +300,7 @@ class AddContactsTableViewController: UITableViewController {
     }
 //    var messageController:ViewController?
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        
 //        dismissViewControllerAnimated(true) {
 //            
@@ -362,7 +362,7 @@ class AddContactsTableViewController: UITableViewController {
      // Pass the selected object to the new view controller.
      }
      */
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
     

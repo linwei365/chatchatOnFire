@@ -14,7 +14,7 @@ class ChatMessageCell: UICollectionViewCell {
     var chatLogController: ChatLogController?
     var activityIndicatorView: UIActivityIndicatorView = {
         
-        let indicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
+        let indicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
         
        indicatorView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -25,13 +25,13 @@ class ChatMessageCell: UICollectionViewCell {
     
     
     lazy var playButton:UIButton = {
-       let button = UIButton(type: .System)
-        button.setTitle("play", forState: .Normal)
+       let button = UIButton(type: .system)
+        button.setTitle("play", for: UIControlState())
         let image = UIImage(named: "play")
-        button.setImage(image, forState: .Normal)
-        button.tintColor = UIColor.whiteColor()
+        button.setImage(image, for: UIControlState())
+        button.tintColor = UIColor.white
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(handlePlay), forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(handlePlay), for: .touchUpInside)
         return button
     }()
     
@@ -40,21 +40,21 @@ class ChatMessageCell: UICollectionViewCell {
     
     func handlePlay( )  {
         
-        if let videoUrl = message?.videoUrl, url = NSURL(string: videoUrl){
-            player = AVPlayer(URL: url)
+        if let videoUrl = message?.videoUrl, let url = URL(string: videoUrl){
+            player = AVPlayer(url: url)
              
             playerLayer = AVPlayerLayer(player: player)
             playerLayer?.frame = bubbleView.bounds
             bubbleView.layer.addSublayer(playerLayer!)
   
-            dispatch_async(dispatch_get_main_queue(), { 
+            DispatchQueue.main.async(execute: { 
                 self.player?.play()
             })
             
             
             //after starts to play the video
 //            messageImage.alpha = 0
-            playButton.hidden = true
+            playButton.isHidden = true
             activityIndicatorView.startAnimating()
         }
    
@@ -75,11 +75,11 @@ class ChatMessageCell: UICollectionViewCell {
     let textView:UITextView = {
          let tV = UITextView()
        
-        tV.font = UIFont.systemFontOfSize(18)
-        tV.backgroundColor = UIColor.clearColor()
+        tV.font = UIFont.systemFont(ofSize: 18)
+        tV.backgroundColor = UIColor.clear
         tV.translatesAutoresizingMaskIntoConstraints = false
-        tV.textColor = UIColor.whiteColor()
-        tV.editable = false
+        tV.textColor = UIColor.white
+        tV.isEditable = false
          return tV
     }()
     
@@ -106,7 +106,7 @@ class ChatMessageCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "IMG_1729")
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .ScaleAspectFill
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 25
         imageView.layer.masksToBounds = true
         return imageView
@@ -118,7 +118,7 @@ class ChatMessageCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "profile_teaser")
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .ScaleAspectFill
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 25
         imageView.layer.masksToBounds = true
         return imageView
@@ -128,16 +128,16 @@ class ChatMessageCell: UICollectionViewCell {
         let imageView = UIImageView()
      
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .ScaleAspectFit
+        imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 16
         imageView.layer.masksToBounds = true
-        imageView.userInteractionEnabled = true
+        imageView.isUserInteractionEnabled = true
         
     imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomImage)))
         return imageView
     }()
     
-    func handleZoomImage(tapGesture: UITapGestureRecognizer)   {
+    func handleZoomImage(_ tapGesture: UITapGestureRecognizer)   {
         
         if let imageView = tapGesture.view as? UIImageView {
         
@@ -160,57 +160,57 @@ class ChatMessageCell: UICollectionViewCell {
         messageImage.addSubview(playButton)
         
         //add iso 9 constraint to View X Y width height
-        playButton.centerXAnchor.constraintEqualToAnchor(messageImage.centerXAnchor).active = true
-        playButton.centerYAnchor.constraintEqualToAnchor(messageImage.centerYAnchor).active = true
-        playButton.widthAnchor.constraintEqualToConstant(50).active = true
-        playButton.heightAnchor.constraintEqualToConstant(50).active = true
+        playButton.centerXAnchor.constraint(equalTo: messageImage.centerXAnchor).isActive = true
+        playButton.centerYAnchor.constraint(equalTo: messageImage.centerYAnchor).isActive = true
+        playButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        playButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         //add iso 9 constraint to View X Y width height
         playButton.addSubview(activityIndicatorView)
-        activityIndicatorView.centerXAnchor.constraintEqualToAnchor(messageImage.centerXAnchor).active = true
-        activityIndicatorView.centerYAnchor.constraintEqualToAnchor(messageImage.centerYAnchor).active = true
-        activityIndicatorView.widthAnchor.constraintEqualToConstant(50).active = true
-        activityIndicatorView .heightAnchor.constraintEqualToConstant(50).active = true
+        activityIndicatorView.centerXAnchor.constraint(equalTo: messageImage.centerXAnchor).isActive = true
+        activityIndicatorView.centerYAnchor.constraint(equalTo: messageImage.centerYAnchor).isActive = true
+        activityIndicatorView.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        activityIndicatorView .heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         //add iso 9 constraint to View X Y width height
-        messageImage.topAnchor.constraintEqualToAnchor(bubbleView.topAnchor).active = true
-        messageImage.leftAnchor.constraintEqualToAnchor(bubbleView.leftAnchor).active = true
-        messageImage.bottomAnchor.constraintEqualToAnchor(bubbleView.bottomAnchor).active = true
-        messageImage.rightAnchor.constraintEqualToAnchor(bubbleView.rightAnchor).active = true
+        messageImage.topAnchor.constraint(equalTo: bubbleView.topAnchor).isActive = true
+        messageImage.leftAnchor.constraint(equalTo: bubbleView.leftAnchor).isActive = true
+        messageImage.bottomAnchor.constraint(equalTo: bubbleView.bottomAnchor).isActive = true
+        messageImage.rightAnchor.constraint(equalTo: bubbleView.rightAnchor).isActive = true
         
         //add iso 9 constraint to View X Y width height
-        profileImageViewB.rightAnchor.constraintEqualToAnchor(self.rightAnchor, constant: -8).active = true
-        profileImageViewB.centerYAnchor.constraintEqualToAnchor(self.centerYAnchor).active = true
-        profileImageViewB.widthAnchor.constraintEqualToConstant(50).active = true
-        profileImageViewB.heightAnchor.constraintEqualToConstant(50).active = true
+        profileImageViewB.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8).isActive = true
+        profileImageViewB.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        profileImageViewB.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        profileImageViewB.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         
         //add iso 9 constraint to View X Y width height
-        profileImageView.leftAnchor.constraintEqualToAnchor(self.leftAnchor, constant: 8).active = true
-        profileImageView.centerYAnchor.constraintEqualToAnchor(self.centerYAnchor).active = true
-        profileImageView.widthAnchor.constraintEqualToConstant(50).active = true
-        profileImageView.heightAnchor.constraintEqualToConstant(50).active = true
+        profileImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
+        profileImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        profileImageView.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        profileImageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         //ios 9 constraint x y width height
-        bubbleViewRightAnchorConstraint = bubbleView.rightAnchor.constraintEqualToAnchor(profileImageViewB.leftAnchor,constant:  -8)
-        bubbleViewRightAnchorConstraint?.active = true
-        bubbleViewLeftAnchorConstraint = bubbleView.leftAnchor.constraintEqualToAnchor(profileImageView.rightAnchor, constant: 8)
-        bubbleViewLeftAnchorConstraint?.active = false
+        bubbleViewRightAnchorConstraint = bubbleView.rightAnchor.constraint(equalTo: profileImageViewB.leftAnchor,constant:  -8)
+        bubbleViewRightAnchorConstraint?.isActive = true
+        bubbleViewLeftAnchorConstraint = bubbleView.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 8)
+        bubbleViewLeftAnchorConstraint?.isActive = false
         
         
-        bubbleView.topAnchor.constraintEqualToAnchor(self.topAnchor).active = true
-        bubbleView.heightAnchor.constraintEqualToAnchor(self.heightAnchor).active = true
-        bubbleViewConstraintWith = bubbleView.widthAnchor.constraintEqualToConstant(200)
-        bubbleViewConstraintWith!.active = true
+        bubbleView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        bubbleView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
+        bubbleViewConstraintWith = bubbleView.widthAnchor.constraint(equalToConstant: 200)
+        bubbleViewConstraintWith!.isActive = true
 //        bubbleView.widthAnchor.constraintEqualToConstant(200).active = true
         
         //ios 9 constraint x y width height
         
-        textView.leftAnchor.constraintEqualToAnchor(bubbleView.leftAnchor, constant:  8).active = true
-        textView.topAnchor.constraintEqualToAnchor(self.topAnchor).active = true
-        textView.heightAnchor.constraintEqualToAnchor(self.heightAnchor ).active = true
+        textView.leftAnchor.constraint(equalTo: bubbleView.leftAnchor, constant:  8).isActive = true
+        textView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        textView.heightAnchor.constraint(equalTo: self.heightAnchor ).isActive = true
 //        textView.widthAnchor.constraintEqualToConstant(200).active = true
-        textView.rightAnchor.constraintEqualToAnchor(bubbleView.rightAnchor).active = true
+        textView.rightAnchor.constraint(equalTo: bubbleView.rightAnchor).isActive = true
   
     }
     
