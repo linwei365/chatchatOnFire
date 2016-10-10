@@ -125,7 +125,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             print("input is not valid")
             return
         }
-        FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user:FIRUser?, error:NSError?) in
+        FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user , error ) in
             if error != nil {
              print(error)
                 return

@@ -63,7 +63,7 @@ extension LoginViewController: UIImagePickerControllerDelegate, UINavigationCont
             return
         }
         
-        FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user:FIRUser?, error:NSError?) in
+        FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
             if error != nil {
                 
                 print(error)
@@ -76,7 +76,7 @@ extension LoginViewController: UIImagePickerControllerDelegate, UINavigationCont
                 print("no uid found")
                 return
                 
-            } 
+            }
             //save data to dataStorage in firebase
             let imageName = UUID().uuidString
             let storageRef = FIRStorage.storage().reference().child("Profile_Images").child("\(imageName).jpg")
@@ -84,31 +84,32 @@ extension LoginViewController: UIImagePickerControllerDelegate, UINavigationCont
             
             if self.loginLogoImageView.image == UIImage(named: "IMG_1729"){
                 self.loginLogoImageView.image = UIImage(named: "profile_teaser")
-            }  
+            }
             
             if let profileImage = self.loginLogoImageView.image, let uploadData = UIImageJPEGRepresentation(profileImage, 0.1){
                 
-            
-            
-//            if let uploadData = UIImagePNGRepresentation(self.loginLogoImageView.image!){
-              
+                
+                
+                //            if let uploadData = UIImagePNGRepresentation(self.loginLogoImageView.image!){
+                
                 //save image upload data to firestorage
                 storageRef.put(uploadData, metadata: nil, completion: { (metadata:FIRStorageMetadata?, error) in
                     if error != nil {
                         print(error)
                         return
                     }
-                     print(metadata?.downloadURL())
+                    print(metadata?.downloadURL())
                     if let userProfileImageUrl = metadata?.downloadURL()?.absoluteString {
                         
                         let values = ["name": name, "email": email, "profileImageUrl": userProfileImageUrl,"imageUID":imageName]
-                        self.registerUserToFireDatabaseWithParameters(uid, values: values)
+                        self.registerUserToFireDatabaseWithParameters(uid, values: values as [String : AnyObject])
                     }
                     
                 })
             }
-
+            
         })
+        
         print("created succesfully")
     }
     

@@ -271,7 +271,7 @@ class AddContactsTableViewController: UITableViewController {
         let childRef = ref.childByAutoId()
         let toID = user.id!
         let fromID = FIRAuth.auth()!.currentUser!.uid
-        let timeStamp:NSNumber = NSNumber(Int(Date().timeIntervalSince1970))
+        let timeStamp:NSNumber = NSNumber(value: Int(Date().timeIntervalSince1970))
         var values: [String: AnyObject] = ["toID": toID as AnyObject, "fromID": fromID as AnyObject, "timeStamp":timeStamp]
         
         //        childRef.updateChildValues(vaules)
